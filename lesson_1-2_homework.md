@@ -39,16 +39,92 @@ file1 file2 file3
 
 ## Решения:
 
-  0. 
-  Для начала создадим 2 виртуальные машины , в моем случае это Centos1 и Centos2 . 
+ 
+ 
+ <details><summary> # 0.  </summary>
+ 
+ 
+ 
+  Для начала создадим 2 виртуальные машины используя vitrualbox gui, в моем случае это Centos1 и Centos2 . 
   Имена пользователей аналогичны.
-У Centos1 установим 2 адаптера сети (bridge и internal network) - эта машина будет иметь доступ куда угодно, зададим второму адаптеру (internal network) имя сети "lan".
+  
+  В настройках виртуальных машин в virtualbox:
+  
+  У Centos1 установим 2 адаптера сети (bridge и internal network) - эта машина будет иметь доступ куда угодно, зададим второму адаптеру (internal network) имя сети "lan".
  
  Для второй машины будем использовать только 1 адаптер (internal network) ,аналогично 1ой , зададим имя сети "lan".
 
   После загрузки виртуальных машин зайдем на них , указав логин и пароль от соответствующей машины.
-  Убедимся что наши сетевые интерфейся доступны, выполним команду 
+  Убедимся что наши сетевые интерфейсы доступны, выполним команду: 
   
   `ip a` .
   
+  Следующий пункт. На каждой машине для интерфейса (internal network) отключим DHCP, настроим статический ip, укажем DNS, маску подсети , шлюз по-умолчанию.
   
+  Для этого перейдем в директорию :
+  
+  `cd /etc/sysconfig/network-scripts`  
+  
+  С помощью редактора Vi отредактируем файл нужного нам интерфейса (в моем случае это enp0s3 и enp0s8):
+  
+  centos1:
+  
+  `sudo vi  ifcfg-enp0s3` .
+  
+  centos2:
+  
+  `sudo vi  ifcfg-enp0s8` .
+  
+  Редактируем строки: 
+
+    BOOTPROTO	с dhcp на none
+    DNS1	указажем dns сервер
+    IPADDR0	настроим статический ip адрес
+    PREFIX0	указажем маску подсети
+    GATEWAY0 настроим шлюз по-умолчанию
+  
+  В итоге получим примерно такой вид файлов.
+  
+  Centos1:
+  
+   ![alt][logo]
+
+[logo]:  https://github.com/outragee/epam-learning/blob/main/centos1_networksetup.png "centos1"
+
+
+  Centos2:
+  
+   ![centos2][logo2]
+   
+[logo2]: https://github.com/outragee/epam-learning/blob/main/centos2_networksetups.png "centos2"
+
+
+  Перезапустим службу сети на каждой из машин выполнив команду:
+
+  `sudo systemctl restart network` .
+  
+  Теперь проверим что сетевые протоколы изменили свои настройки , а заодно попробуем попинговать одну машину на другую и попробуем кинуть ssh.
+  Выполним следующие команды:
+  
+  `ip a` #проверим статус сетевых интерфейсов. 
+  
+  `ping 192.168.100.13`#Из centos2  или `ping 192.168.100.14` #из Centos1.
+  
+  `ssh 192.168.100.13` #для centos2 .14 ,соответственно.
+  
+  
+  Выхлоп терминалов:
+  
+  centos2:
+  
+  ![out2][logo3]
+
+[logo3]: https://github.com/outragee/epam-learning/blob/main/centos2_allnetworks%2Bping.png "centos2"
+
+  centos1:
+  
+  ![out3][logo4]
+
+[logo4]: https://github.com/outragee/epam-learning/blob/main/centos1_allnetworks%2Bping.png "centos1"
+
+</details>
