@@ -90,14 +90,14 @@ file1 file2 file3
   
    ![alt][logo]
 
-[logo]:  https://github.com/outragee/epam-learning/blob/main/centos1_networksetup.png "centos1"
+[logo]:  https://github.com/outragee/epam-learning/blob/main/pics/centos1_networksetup.png "centos1"
 
 
   Centos2:
   
    ![centos2][logo2]
    
-[logo2]: https://github.com/outragee/epam-learning/blob/main/centos2_networksetups.png "centos2"
+[logo2]: https://github.com/outragee/epam-learning/blob/main/pics/centos2_networksetups.png "centos2"
 
 
   Перезапустим службу сети на каждой из машин выполнив команду:
@@ -120,12 +120,16 @@ file1 file2 file3
   
   ![out2][logo3]
 
-[logo3]: https://github.com/outragee/epam-learning/blob/main/centos2_allnetworks%2Bping.png "centos2"
+[logo3]: https://github.com/outragee/epam-learning/blob/main/pics/centos2_allnetworks%2Bping.png "centos2"
 
   centos1:
   
   ![out3][logo4]
 
-[logo4]: https://github.com/outragee/epam-learning/blob/main/centos1_allnetworks%2Bping.png "centos1"
+[logo4]: https://github.com/outragee/epam-learning/blob/main/pics/centos1_allnetworks%2Bping.png "centos1"
 
 </details>
+
+
+ <details><summary> # 1.  </summary>
+
