@@ -210,3 +210,17 @@ file1 file2 file3
 
 [logo10]: https://github.com/outragee/epam-learning/blob/main/pics/wc%2Bheadmore.png "head more than file have"
 
+  </details>
+ 
+  <details><summary>  # 4. </summary>
+ 
+![out10][logo11]
+
+[logo11]: https://github.com/outragee/epam-learning/blob/main/pics/touchfiles.png "touch 1..3"
+
+переименовывать файлы будем командой mv , хотя можно установить и rename :
+
+    :~/test$ mv file_name1.md file_name1.textdoc
+    :~/test$ mv file_name2.md file_name2
+    :~/test$ mv file_name3.md  file_name3.md.latest
+    :~/test$ mv file_name1.textdoc file_name1.txt
