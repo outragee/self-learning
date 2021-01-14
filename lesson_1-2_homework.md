@@ -181,7 +181,17 @@ file1 file2 file3
 
 [logo7]:  https://github.com/outragee/epam-learning/blob/main/pics/find.png "find"
  
-Команда find очень обширна, кроме того ,можно использовать ее в связке с командой grep , что расширит и утончит поиск. Также ,для работы с найденными файлами мы можем использовать опцию -exec :
+Команда find очень обширна, кроме того ,можно использовать ее в связке с командой grep , что расширит и утончит поиск. Также ,для работы с найденными файлами мы можем использовать опцию -exec к примеру найдем как и выше вайлы ,где есть слово help и скопируем эти файлы в /home/centos1/test/ добавив им расширение .done :
+
+`find . /usr/share/man -name '*help*' \-execdir cp {} /home/centos1/test/{}.done \;`
+
+Вывод:
+
+![out7][logo8]
+
+[logo8]:  https://github.com/outragee/epam-learning/blob/main/pics/find-exec.png "find + exec"
+
+По сути ,опция exec предоставляет очень обширные возможности для работы с файлами.
 
 </details>
 
