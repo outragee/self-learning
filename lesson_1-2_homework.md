@@ -39,6 +39,8 @@ file1 file2 file3
 </details>
 
 ## Решения:
+ 
+ <details><summary> # 0-6  </summary>
 
  
  
@@ -232,3 +234,7 @@ file1 file2 file3
 ![out11][logo12]
 
 [logo12]: https://github.com/outragee/epam-learning/blob/main/pics/cd.png "cd"
+
+</details>
+
+</details>
