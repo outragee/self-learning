@@ -40,7 +40,7 @@ file1 file2 file3
 
 ## Решения:
  
- <details><summary> # 0-6  </summary>
+ <details><summary> Задание 1-2 от 12.01.21 </summary>
 
  
  
