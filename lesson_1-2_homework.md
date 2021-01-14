@@ -150,9 +150,9 @@ file1 file2 file3
 Теперь мы одним вызовом ls найдем все файлы, содержащие слово "system" в каталогах /usr/share/man/man1 и /usr/share/man/man7
 Для этого мы перечислим директории , лист которых будем производить и по аналогии выше - выполним grep слова system.
 
-Выхлоп терминала:
+Вывод терминала:
 
-![out4][logo6]
+![out5][logo6]
 
 [logo6]: https://github.com/outragee/epam-learning/blob/main/pics/1systemgrep.png "ls++grep"  
 
@@ -161,7 +161,27 @@ file1 file2 file3
 
 <details><summary> # 2.  </summary>
  
+Найдем в директории /usr/share/man все файлы, которые содержат слово "help" в имени,для этого используем команду:
+
+
+`find /usr/share/man -iname "*help*"`
+
+
+Найдем там же все файлы, имя которых начинается на "conf". Выполнив:
+
+
+`find /usr/share/man -iname "conf*"`
+
+
+Какие действия мы можем выполнить с файлами, найденными командой find (не запуская других команд)? Приведите любой пример с комментарием.
  
  
+ 
+![out6][logo7]
+
+[logo7]:  https://github.com/outragee/epam-learning/blob/main/pics/find.png "find"
+ 
+Команда find очень обширна, кроме того ,можно использовать ее в связке с командой grep , что расширит и утончит поиск. Также ,для работы с найденными файлами мы можем использовать опцию -exec :
+
 </details>
 
