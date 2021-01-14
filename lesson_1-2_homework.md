@@ -193,5 +193,20 @@ file1 file2 file3
 
 По сути ,опция exec предоставляет очень обширные возможности для работы с файлами. Такие как- удаление,перемещение,изменение прав, использование bash - скрипта и другое.
 
-</details>
+ </details>
+
+ <details><summary>  # 3. </summary>
+ 
+  head и tail представлены 1ой командой,чтобы не делать 2 скрина.
+
+![out8][logo9]
+
+[logo9]: https://github.com/outragee/epam-learning/blob/main/pics/head%26tail.png "head&tail"
+
+
+Если мы запросим больше строк,чем имеет файл,то head выдаст все те,что имеются и прекратит работу.
+
+![out9][logo10]
+
+[logo10]: https://github.com/outragee/epam-learning/blob/main/pics/wc%2Bheadmore.png "head more than file have"
 
