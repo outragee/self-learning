@@ -224,3 +224,11 @@ file1 file2 file3
     :~/test$ mv file_name2.md file_name2
     :~/test$ mv file_name3.md  file_name3.md.latest
     :~/test$ mv file_name1.textdoc file_name1.txt
+
+  </details>
+ 
+  <details><summary>  # 5. </summary>
+ 
+![out11][logo12]
+
+[logo12]: https://github.com/outragee/epam-learning/blob/main/pics/cd.png "cd"
