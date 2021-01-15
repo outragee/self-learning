@@ -236,5 +236,21 @@ file1 file2 file3
 [logo12]: https://github.com/outragee/epam-learning/blob/main/pics/cd.png "cd"
 
 </details>
+<details><summary>  # 7. </summary>
 
-</details>
+
+Для выполнения этого задания будем использовать цикл for в связке с коммандой seq (seq - это генератор чисел) .
+Зададим переменные а=1 , b=3 , x=file . используем структуру цикла для каждой итерации генератора seq (который ограничен у нас переменными a=1 и b=3 эхо будет выводить в одной строке значение переменной x(file) и число, генерируемое seq . -n укажет echo вывод в одну строку. :
+
+
+`a=1; b=3 ; x="file" ; for i in `seq  $a  $b `; do  echo -n  "$x $i "; done`
+
+![out12][logo13]
+
+[logo13]: https://github.com/outragee/epam-learning/blob/main/pics/generation%20and%20for%20cycle.png "cycle_generation"
+
+
+ </details>
+ 
+ 
+ </details>
