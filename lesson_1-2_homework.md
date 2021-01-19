@@ -229,13 +229,63 @@ file1 file2 file3
 
   </details>
  
+ 
   <details><summary>  # 5. </summary>
  
 ![out11][logo12]
 
 [logo12]: https://github.com/outragee/epam-learning/blob/main/pics/cd.png "cd"
 
+  </details>
+
+
+  <details><summary>  # 6. </summary>
+ 
+ Создаем директории, заодно перейдем в директорию new:
+ 
+ `mkdir -p /home/outragee/epam-learning/{new,processed} /home/outragee/epam-learning/in-process/{tread0,tread1,tread2} && cd /home/outragee/epam-learning/new/`
+ 
+ 
+ Создадим 100 файлов в директории, поскольку директория new/ текущая то:
+ 
+ 
+ `touch /home/outragee/epam-learning/new/data{00..99}`
+ 
+ 
+ Скопируем файлы в директории tread{0..2}/ :
+ 
+ `cp /home/outragee/epam-learning/new/data{00..33} /home/outragee/epam-learning/in-process/tread0 & cp data{34..67} /home/outragee/epam-learning/in-process/tread1 & cp data{68..99} /home/outragee/epam-learning/in-process/tread2`
+
+ 
+ Выведем содержимое каталога in-process:
+ 
+ `ls -R /home/outragee/epam-learning/in-process/`
+ 
+ 
+ Переместим файлы :
+ 
+ 
+ `mv /home/outragee/epam-learning/in-process/tread{0..2}/* /home/outragee/epam-learning/processed/`
+ 
+ 
+ Выведем содержимое каталога in-process и processed одной командой:
+ 
+ 
+ `ls -a -R /home/outragee/epam-learning/in-process/ /home/outragee/epam-learning/processed/`
+ 
+ 
+ Сравним количество файлов в каталогах new и processed , если они равны удалим файлы из new . Сравнение количества и удаление сделано при помощи условия того, что команда diff -q вернет нам 0 :
+ 
+    if [ "$DIFF -q new/ processed/" != "0" ] ; then rm -r /home/outragee/epam-learning/new/* ; fi
+
+
+
+![out13][logo14]
+
+[logo14]: https://github.com/outragee/epam-learning/blob/main/pics/6full.png "full"
+
 </details>
+
 <details><summary>  # 7. </summary>
 
 
