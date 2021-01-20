@@ -36,15 +36,15 @@ echo file{$a..$b}
 Необходимо предоставить модицицированную команду, результатом которой является следующий вывод: 
 file1 file2 file3
 
-</details>
- <details><summary>  Задания лекций 3-4 (awk,sed,vim) </summary>
- 
+
 </details>
  <details><summary>  Задания лекций 3-4 (awk,sed,vim) </summary>
 
 
  You have log file 'access.log'. It is simple apache log. Format is remote-IP - - [DATE] "method query protocol" status-code send-bytes-from-server "from-where-did-user-came" "user agent" "x-forwarded-for-header"
-Sample can be downloaded from http://www.almhuette-raith.at/apache-log/access.log (~650 Mb)
+Sample can be downloaded from 
+
+http://www.almhuette-raith.at/apache-log/access.log    (~650 Mb)
 
 
 
