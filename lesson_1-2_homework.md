@@ -1,6 +1,6 @@
 ## Задачи:
 
- <details><summary>  Задание 1-2 от 12.01.21 </summary>
+ <details><summary>  Задания лекций 1-2 от 12.01.21 </summary>
   
   0. установить вторую ВМ с доступом только до первой ВМ.
   Все команды выполняются от имени созданного во время инсталляции пользователя (не root).
@@ -37,10 +37,56 @@ echo file{$a..$b}
 file1 file2 file3
 
 </details>
+ <details><summary>  Задания лекций 3-4(awk,sed,vim) </summary>
+ 
+
+
+
+ You have log file 'access.log'. It is simple apache log. Format is remote-IP - - [DATE] "method query protocol" status-code send-bytes-from-server "from-where-did-user-came" "user agent" "x-forwarded-for-header"
+Sample can be downloaded from http://www.almhuette-raith.at/apache-log/access.log (~650 Mb)
+
+
+
+Awk
+* What is the most frequent browser (user agent)?
+* Show number of requests per month for ip 95.108.129.196 (for example: Sep 2016 - 100500 reqs, Oct 2016 - 0 reqs, Nov 2016 - 2 reqs...)
+* Show total amount of data which server has provided for each unique ip (i.e. 100500 bytes for 1.2.3.4; 9001 bytes for 5.4.3.2 and so on)
+
+
+Sed
+* Change all user agents to "lynx"
+* Masquerade all ip addresses. For example, 1.2.3.4 becomes "ip1", 3.4.5.6 becomse "ip2" and so on. Rewrite file.
+Extra (*)
+
+• Show list of unique ips, who made more then 50 requests to the same url within 10 minutes (for example too many requests to "/")
+
+Learn vim:
+
+   vimtutor / vimtutor ru (in your linux terminal with vim installed)
+   
+   http://www.vimgenius.com/
+   
+   https://vimvalley.com/vim-movement-speed-challenge/
+   
+Vim videos
+
+
+   https://www.youtube.com/watch?v=aHm36-na4-4
+   
+   https://www.youtube.com/watch?v=XA2WjJbmmoM
+   
+   https://www.youtube.com/watch?v=_NUO4JEtkDw
+   
+   https://www.youtube.com/watch?v=NzD2UdQl5Gc
+   
+   https://www.youtube.com/watch?v=5r6yzFEXajQ
+   
+ 
+ </details>
 
 ## Решения:
  
- <details><summary> Задание 1-2 от 12.01.21 </summary>
+ <details><summary> Задания лекций 1-2 от 12.01.21 </summary>
 
  
  
