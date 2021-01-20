@@ -37,9 +37,10 @@ echo file{$a..$b}
 file1 file2 file3
 
 </details>
- <details><summary>  Задания лекций 3-4(awk,sed,vim) </summary>
+ <details><summary>  Задания лекций 3-4 (awk,sed,vim) </summary>
  
-
+</details>
+ <details><summary>  Задания лекций 3-4 (awk,sed,vim) </summary>
 
 
  You have log file 'access.log'. It is simple apache log. Format is remote-IP - - [DATE] "method query protocol" status-code send-bytes-from-server "from-where-did-user-came" "user agent" "x-forwarded-for-header"
@@ -348,6 +349,25 @@ Vim videos
 
 
  </details>
+ </details>
+
+
+
+
+
+
+
+
+
+ <details><summary>  Задания лекций 3-4 (awk,sed,vim) </summary>
+ 
+ <details><summary> AWK </summary>
  
  
+ </details>
+ 
+ <details><summary> SED </summary>
+ 
+ 
+ </details>
  </details>
