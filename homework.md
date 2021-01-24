@@ -75,7 +75,7 @@ Vim videos
    https://www.youtube.com/watch?v=aHm36-na4-4
    
    https://www.youtube.com/watch?v=XA2WjJbmmoM
-   
+   https://github.com/outragee/epam-learning/blob/main/homework.md
    https://www.youtube.com/watch?v=_NUO4JEtkDw
    
    https://www.youtube.com/watch?v=NzD2UdQl5Gc
@@ -433,8 +433,53 @@ Task3: ACL
 
  <details><summary> TASK 1  </summary>
 
- 
- </details>
+
+
+Заранее отредактируем файл /etc/login.defs .
+изменим длительность действия пароля на 30 дней.
+
+
+     PASS_MAX_DAYS 30
+
+
+Создадим группу " sales " и присвоим ей GID 4000. 
+
+
+`sudo groupadd -g 4000 sales`
+
+
+Теперь создадим пользователей bob,alice,eve и обозначим группу sales как основную для них ,а так-же ограничим время существования аккаунтов до 90 дней.
+
+
+`sudo useradd -g 4000 -e $(date -d "90 days" "+%Y-%m-%d") bob`
+
+`sudo useradd -g 4000 -e $(date -d "90 days" "+%Y-%m-%d") alice`
+
+`sudo useradd -g 4000 -e $(date -d "90 days" "+%Y-%m-%d") eve`
+
+
+Зададим пароли пользователям и укажем длительность действия пароля,а так-же заставим их сразу поменять пароль, указав -n=1 .
+
+
+
+`sudo passwd -n 1 -w 3 -x 30 bob`
+
+
+`sudo passwd -n 1 -w 3 -x 30 alice`
+
+
+`sudo passwd -n 1 -w 3 -x 30 eve`
+
+
+
+Изменим срок действия пароля у пользователя bob. 
+
+
+`sudo chage -M 15 bob`
+
+
+
+</details>
  
   
  <details><summary> TASK 2 </summary>
