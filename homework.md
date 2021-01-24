@@ -484,6 +484,58 @@ Task3: ACL
   
  <details><summary> TASK 2 </summary>
 
+Используйте команды: su, mkdir, chown, chmod и другие. Создайте трёх пользователей glen, antony, lesly. У вас должна быть директория /home/students, где эти три пользователя могут работать совместно с файлами. Должен быть возможен только пользовательский и групповой доступ, создание и удаление файлов в /home/students. Файлы, созданные в этой директории, должны автоматически присваиваться группе студентов students.
+
+Создадим группу students :
+
+
+`sudo groupadd -g 1000 students`
+
+
+
+Создадим 3х пользователей glen, antony, lesly добавим их в группу students.
+
+
+`sudo useradd -g 1000 -e $(date -d "90 days" "+%Y-%m-%d") glen`
+
+
+`sudo useradd -g 1000 -e $(date -d "90 days" "+%Y-%m-%d") antony`
+
+
+`sudo useradd -g 1000 -e $(date -d "90 days" "+%Y-%m-%d") lesly`
+
+
+
+Создадим директорию  /home/students :
+
+
+`sudo mkdir /home/students `
+
+
+Зайдем в директорию /home/students:
+
+`cd /home/students`
+
+Присвоим все файлы рекурсивно в директории /home/students группе students:
+
+
+`sudo chown -R :students *`
+
+
+
+Изменим права у директориии разрешим все владельцу и группе:
+
+
+
+`sudo chmod -r ug+rwx /home/students`
+
+
+Изменим права у директории, запретим всем остальным какие либо действия с директорией :
+
+
+`sudo chmod o-rwx /home/students `
+
+
 
  </details>
  
