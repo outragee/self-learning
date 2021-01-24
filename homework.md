@@ -426,3 +426,25 @@ Task3: ACL
  
  </details>
  </details>
+ 
+ <details><summary>  Задания лекций 5-6 (users, groups, file access) </summary>
+
+ 
+
+ <details><summary> TASK 1  </summary>
+
+ 
+ </details>
+ 
+  
+ <details><summary> TASK 2 </summary>
+
+
+ </details>
+ 
+ <details><summary> TASK 3 </summary>
+
+
+ </details>
+ </details>
+
