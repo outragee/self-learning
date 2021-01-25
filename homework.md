@@ -541,6 +541,85 @@ Task3: ACL
  <details><summary> TASK 3 </summary>
 
 
+
+Создадим общую директорию и файлы в ней.
+
+
+`sudo mkdir /share/cases`
+
+
+`touch murders.txt moriarty.txt`
+
+
+Создадим 2 группы bakerstreet , scotlandyard:
+
+
+`sudo groupadd -g 2000 bakerstreet`
+
+
+`sudo groupadd -g 3000 scotlandyard`
+
+
+Создадим пользователей holmes,watson,lestrade,gregson,jones :
+ 
+
+`sudo useradd -g 2000 holmes`
+
+
+`sudo useradd -g 2000 watson`
+
+
+`sudo useradd -g 3000 lestrade`
+
+
+`sudo useradd -g 3000 gregson`
+
+
+`sudo useradd -g 3000 jones`
+
+
+
+Создадим пароли пользователям:
+
+
+`sudo passwd -n 15 -w 3 -x 30 holmes`
+
+`sudo passwd -n 15 -w 3 -x 30 watson`
+
+`sudo passwd -n 15 -w 3 -x 30 lestrade`
+
+`sudo passwd -n 15 -w 3 -x 30 gregson`
+
+`sudo passwd -n 15 -w 3 -x 30 jones`
+
+
+
+Изменим владельца у общей директории :
+
+
+`cd /share/cases && sudo chown -R :bakerstreet *`
+
+
+
+Настроим права директории:
+
+
+`sudo chmod -r ug+rw /share/cases`
+
+
+`sudo chmod -r o-rwx /share/cases`
+
+
+`sudo setfacl -m g:scotlandyard:rw /share/cases`
+
+
+
+Дадим маску пользователю jones:
+
+
+`sudo setfacl -m u:jones:r /share/cases`
+
+
  </details>
  </details>
 
