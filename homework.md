@@ -449,6 +449,30 @@ lsof
  
  <details><summary> AWK </summary>
  
+ Чтобы узнать какой браузер чаще всего использовался будем считать повторы в столбце `$12` :
+  
+  
+  `awk '{if (count [$ 12] ++ >= max) max = count [$ 12]} END {for (i in count) if (max == count [i]) print i, count [i]}' /home/outragee/epam/epam-learning/access.log `
+  
+ 
+ 
+    outragee@outragee-X220:~$ awk '{if (count [$ 12] ++ >= max) max = count [$ 12]} END {for (i in count) if (max == count [i]) print i, count [i]}' /home/outragee/epam/epam-learning/access.log 
+    "Mozilla/4.0 43164
+
+ 
+ 
+ Для поиска количества запросов от адреса ,необходимо задать условие с адресом в `$1` ,а так-же искомый месяц в `$4`.
+ 
+ 
+ `awk  '  { if (($1 == "193.106.31.130") && (  $4 ~ "Dec" ))   print  "Dec count is:"count++ } ' access.log  | tail -1`
+ 
+ 
+ 
+    outragee@outragee-X220:~/epam/epam-learning$ awk  '  { if (($1 == "193.106.31.130") && (  $4 ~ "Dec" ))   print  "Dec count is:"count++ } ' access.log  | tail -1
+    Dec count is:10290
+    awk  '  { if (($1 == "193.106.31.130") && (  $4 ~ "Jan" ))   print  "Jan count is:"count++ } ' access.log  | tail -1
+    Jan count is:32378
+
  
  </details>
  
