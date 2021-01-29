@@ -751,7 +751,7 @@ lsof
 
  </details>
  <details><summary> Systemd </summary>
- Для начала напишем 2 скрипта , 1ый будет выдавать текущую дату , писать что демон запушен в это время и затем уходить в sleep , по завершению sleep отправлять 1 в файл(лог) . Второй демон будет совсем простой , он напишет дату, когда он будет выполнен и отправит 2 в файл(лог). Укажем,что демон 2 запускается после сервиса daemon1 и после таймера timerd2. Напишем таймер и зададим ему дату срабатывания.
+ Для начала напишем 2 скрипта , 1ый будет выдавать текущую дату , писать что демон запушен в это время и затем уходить в sleep , по завершению sleep отправлять 1 в файл(лог) . Второй демон будет совсем простой , он напишет дату, когда он будет выполнен и отправит 2 в файл(лог). Укажем,что демон 2 и таймер запускаются после сервиса daemon1 . Напишем таймер и зададим ему дату срабатывания.
  
 *Daemon 1*:
  
@@ -815,21 +815,15 @@ lsof
        [Unit]
        Description=daemon 2 unit
        After=daemon1.service
-       After=timerd2.service
+       Require=daemon1.service
        
        [Service]
        Type=oneshot
-       PIDFile=/home/outragee/epam/epam-learning/daemon2.pid
-       WorkingDirectory=/home/outragee/epam/epam-learning
-
+       ExecStart=/usr/sbin/d2.sh
+       RemainAfterExit=yes
+       
        User=outragee
        Group=outragee
-
-       OOMScoreAdjust=-100
-
-       ExecStart=/usr/sbin/d2.sh   
-       ExecStop=/bin/kill -15 $MAINPID 
-       TimeoutSec=300
 
        [Install]
        WantedBy=multi-user.target
@@ -840,11 +834,10 @@ lsof
        
        [Unit]
        Description= Timer for daemon2
-       Requires=daemon2.service
+       After=daemon1.service
 
        [Timer]
-       Unit=myMonitor.service
-       OnCalendar=01-01-2019 00:00:00
+       OnCalendar=2019-01-01
 
        [Install]
        WantedBy=timers.target
@@ -853,27 +846,26 @@ lsof
  Поместим юнит файлы в директорию `/etc/systemd/system` и изменим права у файлов:
  
  
- `sudo chmod 755 daemon1.service daemon2.service timerd2.service`.  
+ `sudo chmod 755 daemon1.service daemon2.service daemon2.timer` 
  
  
- Теперь запустим наших демонов :
- 
-`sudo systemctl start daemon1.service`
+ Теперь запустим наших демонов и убедимся что все работает как должно:
 
-     outragee@outragee-X220:/etc/systemd/system$ sudo systemctl status daemon1.service 
-     ● daemon1.service - MyUnit
-     Loaded: loaded (/etc/systemd/system/daemon1.service; enabled; vendor prese>
-     Active: active (running) since Fri 2021-01-29 08:56:33 MSK; 7s ago
-     Main PID: 10792 (d1.sh)
-      Tasks: 2 (limit: 9343)
-     Memory: 844.0K
-     CGroup: /system.slice/daemon1.service
-             ├─10792 /bin/bash /usr/sbin/d1.sh
-             └─10794 sleep 10
 
-     янв 29 08:56:33 outragee-X220 systemd[1]: Started MyUnit.
-     янв 29 08:56:33 outragee-X220 d1.sh[10792]: daemon 2 started at:
-     янв 29 08:56:33 outragee-X220 d1.sh[10793]: 08:56:33
+
+![out14][logo15]
+
+
+[logo15]: https://github.com/outragee/epam-learning/blob/main/pics/status.png "daemon status check"
+
+
+
+Посмотрим вывод файла `/tmp/homework`:
+        
+        
+        outragee@outragee-X220:/tmp$ cat /tmp/homework 
+        1
+
 
  </details>
  </details>
