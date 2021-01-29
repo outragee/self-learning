@@ -750,7 +750,100 @@ lsof
 
 
  </details>
+ <details><summary> Systemd </summary>
+ Для начала напишем 2 скрипта , 1ый будет выдавать текущую дату , писать что демон запушен в это время и затем уходить в sleep , по завершению sleep отправлять 1 в файл(лог) . Второй демон будет совсем простой , он напишет дату, когда он будет выполнен и отправит 2 в файл(лог). Укажем,что демон 2 запускается после сервиса daemon1
  
+ 
+*Daemon 1*:
+ 
+        #!/bin/bash
+
+        #print 
+        echo "daemon 2 started at:"
+
+        # start time
+        date +"%H:%M:%S"
+
+        # sleep for 10sec
+        sleep 10
+
+        # do echo like log file
+        echo 1 > /tmp/homework
+
+
+*Daemon 2*:
+        
+
+        #!/bin/bash
+
+
+        #print 
+        echo "daemon 2 oneshoted at:"
+
+        # start time
+        date +"%H:%M:%S"
+
+        echo 2 > /tmp/homework
+
+
+*Unit file daemon 1* :
+         
+       [Unit]
+       Description=daemon 1 unit
+       After=network.target
+
+       [Service]
+       Type=simple
+       PIDFile=/home/outragee/epam/epam-learning/daemon1.pid
+       WorkingDirectory=/home/outragee/epam/epam-learning
+
+       User=outragee
+       Group=outragee
+
+       OOMScoreAdjust=-100
+
+       ExecStart=/usr/sbin/d1.sh   
+       ExecStop=/bin/kill -15 $MAINPID 
+       TimeoutSec=300
+
+       [Install]
+       WantedBy=multi-user.target 
+
+
+*Unit file daemon 2* :
+
+      
+       [Unit]
+       Description=daemon 2 unit
+       After=network.target
+       After=daemon1.service
+       
+       [Service]
+       Type=oneshot
+       PIDFile=/home/outragee/epam/epam-learning/daemon2.pid
+       WorkingDirectory=/home/outragee/epam/epam-learning
+
+       User=outragee
+       Group=outragee
+
+       OOMScoreAdjust=-100
+
+       ExecStart=/usr/sbin/d2.sh   
+       ExecStop=/bin/kill -15 $MAINPID 
+       TimeoutSec=300
+
+       [Install]
+       WantedBy=multi-user.target
+       
+
+*Timer* :
+
+
+
+ 
+ 
+ 
+ </details>
  </details>
  </details>
 
