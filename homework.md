@@ -1,6 +1,6 @@
 ## Задачи:
 
- <details><summary>  Задания лекций 1-2 от 12.01.21 </summary>
+ <details><summary>  Задания лекций 1-2  </summary>
   
   0. установить вторую ВМ с доступом только до первой ВМ.
   Все команды выполняются от имени созданного во время инсталляции пользователя (не root).
@@ -170,6 +170,90 @@ lsof
 3. List all ESTABLISHED TCP connections ONLY with lsof
 
  </details>
+ 
+ <details><summary>  Задания лекций 9-10 (SSH , timezone , logs )  </summary>
+ 
+ 
+ **Task 1:**
+ 
+ 
+ *As a result of each point, you should provide a corresponding command.localhost - your CentOS VM running in VirtualBoxremotehost - 40.68.74.188 (public IP)webserver - 10.0.0.5 (private IP)1.1. SSH to remotehost using username and password provided to you in Slack. Logout from remotehost.*
+ 
+  1.2. Generate new SSH key-pair on your localhost with name "hw-5" (keys should becreated in ~/.ssh folder).
+  
+  1.3. Set up key-based authentication, so that you can SSH to  remotehost  withoutpassword.
+  
+  1.4. SSH to remotehost without password. Log out from remotehost.
+  
+  1.5. Create SSH config file, so that you can SSH to remotehost simply running`sshremotehost` command. As a result, provide output of command`cat ~/.ssh/config`.
+  
+  1.6. Using command line utility (curl or telnet) verify that there are some webserverrunning on port 80 of webserver.  Notice that webserver has a private network IP, soyou can access it only from the same network (when you are on remotehost that runsin the same private network). Log out from remotehost.
+  
+  1.7. Using SSH setup port forwarding, so that you can reach  webserver from yourlocalhost (choose any free local port you like).
+  
+  1.8 Like in 1.6, but on localhost using command line utility verify that localhost andport you have specified act like webserver, returning same result as in 1.6.
+  
+  1.9 (*) Open webserver webpage in browser of your Host machine of VirtualBox(Windows, or Mac, or whatever else you use). You may need to setup port forwardingin settings of VirtualBox.
+ 
+ 
+ 
+**Task 2:**
+
+*Following tasks should be executed on your localhost as you will need root privileges*
+
+  2.1.Imagine your localhost has been relocated to Havana. Change the time zone onthe localhost to Havana and verify the time zone has been changed properly (may bemultiple commands).
+  
+  2.2. Find all systemd journal messages on localhost, that were recorded in the last 50minutes and originate from a system service started with user id 81 (single command).
+  
+  2.3. Configure  rsyslogd  by adding  a  rule  to  the  newly created  configuration   file/etc/rsyslog.d/auth-errors.conf to log all security and authentication messages with thepriority alert and higher to the  /var/log/auth-errors file. Test the newly added logdirective with the logger command (multiple commands).
+ 
+ </details>
+ 
+ 
+ <details><summary> Задание 10-11 ( Networking )  </summary>
+ 
+**1.** С помощью утилиты nmcli добавте второй ip адрес сетевому интерфейсу enp0s3 (или тому, который является "основным" для вашей машины):
+  
+   1.1 IP Адрес должен быть назначен из пула немаршрутизируемых в Интернете пулов (aka серых IP)
+   
+   1.2 Адрес НЕ должен принадлежать пулу адресов, который уже назначен какому-либо из интерфейсов
+   
+   1.3 В подсети нового адреса должно быть как можно меньше адресов (broadcast и network адрес назначать интерфейсу нельзя)
+   
+   1.4 перезагрузите машину, убедитесь что оба интерфейса имеет оба адреса (вы должны мочь подключиться по ssh к новому ip адресу)
+   
+
+**2.** Новый IP адрес должен "резолвиться" в "private" DNS запись, а hostname вашей машины должен быть таким же, как у ближайшей галактики к нашей Солнечной системе (ну или выберете обычное скучное имя). Продемонстрируйте результаты с помощью  одной из утилит (dig, nslookup, host)
+
+
+**3.** tcpdump и веселье:
+
+   3.1 Подключаетесь по ssh ко второму интерфейсу машины, логинетесь.
+   
+   3.2 В одной сессии запускаете tcpdum, в другой сессии пытаетесь получить используя любой http клиент контент страницы по адресу: example.com
+   
+   3.2* Получите контент страницы с помощтью telnet
+   
+   3.3 В полученном выводе, найдите содержимое страницы и все HTTP заголовки.
+   
+   3.4 tcpdump команда должна быть максимально "узконаправленная", то есть, в выводе должно быть минимум трафика, не относящегося к цели задания.
+  
+**4.** Найдите номер порта, на котором запущен SSH сервер на хосте: 79.134.223.227 + все открытые порты.
+
+***5.***
+   Для выполнения этого задания вы должны получить доступ на хост с адресом: 45.88.76.32.
+   
+   Для этого вам необходимо передать открытую часть ключа преподавателю и после подтверждения подключиться по ssh к хосту.
+   
+   Цель задания: вам нужно найти сообщение в icmp трафике, который поступает на этот хост 42.88.76.32.   
+   
+   Предоставте сообщнеие в читаемом варианте и предоставте команду которой вы пользовались чтобы прочесть это сообщение. 
+   
+   Подсказка: вам доступен tcpdump (/usr/sbin/tcpdump) на хосте.
+ 
+ 
+ </details>
+ 
  
 ## Решения:
  
