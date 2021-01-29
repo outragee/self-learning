@@ -210,7 +210,7 @@ lsof
  </details>
  
  
- <details><summary> Задание 10-11 ( Networking )  </summary>
+ <details><summary> Задание 11-12 ( Networking )  </summary>
  
 **1.** С помощью утилиты nmcli добавте второй ip адрес сетевому интерфейсу enp0s3 (или тому, который является "основным" для вашей машины):
   
