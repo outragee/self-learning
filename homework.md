@@ -751,8 +751,7 @@ lsof
 
  </details>
  <details><summary> Systemd </summary>
- Для начала напишем 2 скрипта , 1ый будет выдавать текущую дату , писать что демон запушен в это время и затем уходить в sleep , по завершению sleep отправлять 1 в файл(лог) . Второй демон будет совсем простой , он напишет дату, когда он будет выполнен и отправит 2 в файл(лог). Укажем,что демон 2 запускается после сервиса daemon1
- 
+ Для начала напишем 2 скрипта , 1ый будет выдавать текущую дату , писать что демон запушен в это время и затем уходить в sleep , по завершению sleep отправлять 1 в файл(лог) . Второй демон будет совсем простой , он напишет дату, когда он будет выполнен и отправит 2 в файл(лог). Укажем,что демон 2 запускается после сервиса daemon1 и после таймера timerd2. Напишем таймер и зададим ему дату срабатывания.
  
 *Daemon 1*:
  
@@ -815,8 +814,8 @@ lsof
       
        [Unit]
        Description=daemon 2 unit
-       After=network.target
        After=daemon1.service
+       After=timerd2.service
        
        [Service]
        Type=oneshot
@@ -837,12 +836,45 @@ lsof
        
 
 *Timer* :
+       
+       
+       [Unit]
+       Description= Timer for daemon2
+       Requires=daemon2.service
 
+       [Timer]
+       Unit=myMonitor.service
+       OnCalendar=01-01-2019 00:00:00
 
+       [Install]
+       WantedBy=timers.target
 
  
+ Поместим юнит файлы в директорию `/etc/systemd/system` и изменим права у файлов:
  
  
+ `sudo chmod 755 daemon1.service daemon2.service timerd2.service`.  
+ 
+ 
+ Теперь запустим наших демонов :
+ 
+`sudo systemctl start daemon1.service`
+
+     outragee@outragee-X220:/etc/systemd/system$ sudo systemctl status daemon1.service 
+     ● daemon1.service - MyUnit
+     Loaded: loaded (/etc/systemd/system/daemon1.service; enabled; vendor prese>
+     Active: active (running) since Fri 2021-01-29 08:56:33 MSK; 7s ago
+     Main PID: 10792 (d1.sh)
+      Tasks: 2 (limit: 9343)
+     Memory: 844.0K
+     CGroup: /system.slice/daemon1.service
+             ├─10792 /bin/bash /usr/sbin/d1.sh
+             └─10794 sleep 10
+
+     янв 29 08:56:33 outragee-X220 systemd[1]: Started MyUnit.
+     янв 29 08:56:33 outragee-X220 d1.sh[10792]: daemon 2 started at:
+     янв 29 08:56:33 outragee-X220 d1.sh[10793]: 08:56:33
+
  </details>
  </details>
  </details>
