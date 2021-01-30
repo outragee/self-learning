@@ -952,6 +952,50 @@ lsof
 
 
  </details>
+ 
+ <details><summary> Cron/anacron </summary> 
+ 
+ **1.** Создадим джобу,которая будет выполнять запуск нашего скрипта. В центос есть таблица `/etc/anacrontab` аналогичная таблице crontab. Зайдем  и создадим в ней задание:
+ 
+ `sudo vim \etc\anacrontab`
+ 
+    # /etc/anacrontab: configuration file for anacron
+
+    # See anacron(8) and anacrontab(5) for details.
+
+    SHELL=/bin/sh
+    PATH=/sbin:/bin:/usr/sbin:/usr/bin
+    MAILTO=root
+    # the maximal random delay added to the base delay of the jobs
+    RANDOM_DELAY=45
+    # the jobs will be started during the following hours only
+    START_HOURS_RANGE=3-22
+
+    #period in days   delay in minutes   job-identifier   command
+    1       5       cron.daily              nice run-parts /etc/cron.daily
+    7       25      cron.weekly             nice run-parts /etc/cron.weekly
+    2       1       cron.every2days         nice run-parts /etc/cron.every2days
+    @monthly 45     cron.monthly            nice run-parts /etc/cron.monthly
+ 
+ Теперь создадим директорию `/etc/cron.every2days/` и файл `echosender` :
+ 
+ `sudo vim /etc/cron.every2days/echosender`
+ 
+ И отредактируем его:
+
+ 
+    #!/bin/bash
+    echo "Hello" > /opt/hello
+
+ В завершении ,проверим имеются ли ошибки если вывод пуст,то их нет:
+ 
+ `anacron -T`
+ 
+ **2.**
+ 
+ 
+ </details>
+ 
  </details>
  </details>
 
