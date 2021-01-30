@@ -977,9 +977,9 @@ lsof
     2       1       cron.every2days         nice run-parts /etc/cron.every2days
     @monthly 45     cron.monthly            nice run-parts /etc/cron.monthly
  
- Теперь создадим директорию `/etc/cron.every2days/` и файл `echosender` :
+ Теперь создадим директорию `/etc/cron.every2days/` и файл `echosender.sh` :
  
- `sudo vim /etc/cron.every2days/echosender`
+ `sudo vim /etc/cron.every2days/echosender.sh`
  
  И отредактируем его:
 
@@ -992,7 +992,12 @@ lsof
  `anacron -T`
  
  **2.**
+ Для начала создадим резервную копию имеющегося файла crontab , просто скопировав его и добавив .bak. Затем запишем новое задание :
  
+ `crontab -e`
+ 
+ `@reboot sleep 60 && /etc/cron.every2days/echosender.sh`
+
  
  </details>
  
