@@ -1001,6 +1001,51 @@ lsof
  
  </details>
  
+
+ <details><summary> Lsof </summary> 
+ 
+ **1.**
+ 
+ `sleep 2m  2>stderr.log 1>stdout.log`
+ 
+ **2.**
+ 
+    
+    outragee@outragee-X220:~$ lsof /home/outragee/stdout.log 
+    COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+    sleep   11106 outragee    1w   REG    8,2        0 4198453 /home/outragee/stdout.log
+    outragee@outragee-X220:~$ lsof /home/outragee/stderr.log 
+    COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+    sleep   11106 outragee    2w   REG    8,2        0 4198449 /home/outragee/stderr.log
+
+ 
+ 
+ **3.**
+ 
+ Для выполнения этого заданя , укажем флаги -ipv4 -ipv6 и tcp ip:
+ 
+ `lsof -a -i4 -i6 -itcp`
+ 
+    outragee@outragee-X220:~$ lsof -a -i4 -i6 -itcp
+    COMMAND    PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+    ignition- 2974 outragee    6u  IPv4  46010      0t0  TCP localhost:32000->localhost:31000 (ESTABLISHED)
+    java      3092 outragee    4u  IPv4  48012      0t0  TCP localhost:32000 (LISTEN)
+    java      3092 outragee   93u  IPv6  46007      0t0  TCP localhost:31000->localhost:32000 (ESTABLISHED)
+    java      3092 outragee   99u  IPv6  51220      0t0  TCP *:omniorb (LISTEN)
+    chrome    8422 outragee   29u  IPv4  71186      0t0  TCP outragee-X220:48522->lb-140-82-112-25-iad.github.com:https (ESTABLISHED)
+    chrome    8422 outragee   30u  IPv4  72164      0t0  TCP outragee-X220:49548->220.165.107.34.bc.googleusercontent.com:https (ESTABLISHED)
+    chrome    8422 outragee   60u  IPv4  62841      0t0  TCP outragee-X220:41384->lh-in-f188.1e100.net:5228 (ESTABLISHED)
+    chrome    8422 outragee   62u  IPv4  72183      0t0  TCP outragee-X220:58694->151.101.84.193:https (ESTABLISHED)
+    chrome    8422 outragee   65u  IPv4  71376      0t0  TCP outragee-X220:35202->151.101.65.69:https (ESTABLISHED)
+    chrome    8422 outragee   68u  IPv4  72184      0t0  TCP outragee-X220:33874->192.0.73.2:https (ESTABLISHED)
+    chrome    8422 outragee   76u  IPv4  70410      0t0  TCP outragee-X220:35212->151.101.65.69:https (ESTABLISHED)
+    chrome    8422 outragee   77u  IPv4  70889      0t0  TCP outragee-X220:35700->104.244.42.136:https (ESTABLISHED)
+
+ 
+
+ 
+ </details>
+ 
  </details>
  </details>
 
