@@ -1069,6 +1069,7 @@ lsof
     Connection to 40.68.74.188 closed.
 
 
+
 Отредактируем файл конфига:
     
     Host epam
@@ -1076,7 +1077,8 @@ lsof
         User Ivan_Rigalin
         port 22
         IdentityFile ~/.ssh/hw-5
-        
+
+
         
 Создадим новую пару ключей, старые предварительно лучше бы копирнуть.
 
@@ -1104,6 +1106,8 @@ lsof
     outragee@outragee-X220:~/.ssh$ ls
     config  hw-5  hw-5.pub  id_rsa  id_rsa.bak  id_rsa.pub  id_rsa.pub.bak  known_hosts
 
+
+
 Зальем ключ на сервер , проверим ,работает ли вход без пароля :
 
     outragee@outragee-X220:~/.ssh$ ssh-copy-id -i ~/.ssh/hw-5 Ivan_Rigalin@40.68.74.188
@@ -1122,7 +1126,9 @@ lsof
     [Ivan_Rigalin@vm-one ~]$ 
     [Ivan_Rigalin@vm-one ~]$ logout
     Connection to 40.68.74.188 closed.
-    
+
+
+
 Проверим ,есть ли сервис на 80 порту:
     
     [Ivan_Rigalin@vm-one ~]$ curl -v telnet://10.0.0.5:80
@@ -1141,6 +1147,7 @@ lsof
     Nmap done: 1 IP address (1 host up) scanned in 2.27 seconds
 
 
+
  Теперь пробросим порт и проверим доступность из локалки:
  
     outragee@outragee-X220:~/.ssh$ ssh -L 9999:localhost:80 Ivan_Rigalin@40.68.74.188
@@ -1154,8 +1161,26 @@ lsof
 
 
  
-
+ Бонус :
+ 
+ Делаем форвард до локальной машины внутри сети :
     
+    ssh -L 9999:10.0.0.5:80 epam
+    Last login: Mon Feb  1 08:40:14 2021 from 176.59.97.147
+    [Ivan_Rigalin@vm-one ~]$ 
+    
+    
+
+Теперь откроем наш браузер и напишем адрес ` http://localhost:9999/ ` :
+
+
+
+
+![out15][logo16]
+
+
+[logo16]: https://github.com/outragee/epam-learning/blob/main/pics/ngnx.png "nginx output"
+
 
 </details>
 
