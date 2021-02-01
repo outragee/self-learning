@@ -1184,7 +1184,30 @@ lsof
 
 </details>
 
+<details><summary>  TASK 2 </summary> 
+
+Сменим часовой пояс:
+
+    outragee@outragee-X220:~/epam/epam-learning$ timedatectl list-timezones | grep Havana
+    America/Havana
+    outragee@outragee-X220:~/epam/epam-learning$ cat /etc/timezone 
+    Europe/Moscow
+    outragee@outragee-X220:~/epam/epam-learning$ timedatectl list-timezones | grep Havana
+    America/Havana
+    outragee@outragee-X220:~/epam/epam-learning$ sudo timedatectl set-timezone America/Havana 
+
+Теперь поищем измененные журналы на локалхосте за последние 50 минут , от пользователя с id 81:
+
+    outragee@outragee-X220:~/epam/epam-learning$ journalctl _UID=81 -u localhost --since "50 min ago"  --until "now"
+    -- Logs begin at Mon 2020-10-26 07:22:23 MSK, end at Mon 2021-02-01 13:23:47 MSK. --
+    -- No entries --
+    
+    
+
+
 </details>
+</details>
+ 
  
  </details>
  </details>
