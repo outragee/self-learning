@@ -1045,6 +1045,121 @@ lsof
 
  
  </details>
+ </details>
+
+ 
+ 
+ 
+ <details><summary> Задания лекций 9-10 (SSH , timezone , logs ) </summary> 
+ 
+ <details><summary>  SSH </summary> 
+Зайдем на хост и выйдем:
+
+    outragee@outragee-X220:~$ ssh Ivan_Rigalin@40.68.74.188 
+    The authenticity of host '40.68.74.188 (40.68.74.188)' can't be established.
+    ECDSA key fingerprint is SHA256:4r72O0/zt+DU9bsD85l3ZeMMYDlDRTv9h4KWBMoekKY.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    Warning: Permanently added '40.68.74.188' (ECDSA) to the list of known hosts.
+    Password: 
+    Password: 
+    Last failed login: Mon Feb  1 07:26:00 UTC 2021 from 176.59.97.147 on ssh:notty
+    There was 1 failed login attempt since the last successful login.
+    [Ivan_Rigalin@vm-one ~]$ 
+    [Ivan_Rigalin@vm-one home]$ logout
+    Connection to 40.68.74.188 closed.
+
+
+Отредактируем файл конфига:
+    
+    Host epam
+        Hostname 40.68.74.188
+        User Ivan_Rigalin
+        port 22
+        IdentityFile ~/.ssh/hw-5
+        
+        
+Создадим новую пару ключей, старые предварительно лучше бы копирнуть.
+
+    outragee@outragee-X220:~/.ssh$ ssh-keygen 
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/home/outragee/.ssh/id_rsa): hw-5
+    Enter passphrase (empty for no passphrase): 
+    Enter same passphrase again: 
+    Your identification has been saved in hw-5
+    Your public key has been saved in hw-5.pub
+    The key fingerprint is:
+    SHA256:mtHGI7uwYObQz2ghM1BOc7zjFeN1hUD4X7vEtSVa6Do outragee@outragee-X220
+    The key's randomart image is:
+    +---[RSA 3072]----+
+    |   .   oo. o.    |
+    |  + o + . o      |
+    | + o o = .   .   |
+    |. . o oo.   o + .|
+    |.  . oo S. + = + |
+    |+.. .  B .. * .  |
+    |.+=.. +    o .   |
+    | =.= o .  E .    |
+    | .o + .    .     |
+    +----[SHA256]-----+
+    outragee@outragee-X220:~/.ssh$ ls
+    config  hw-5  hw-5.pub  id_rsa  id_rsa.bak  id_rsa.pub  id_rsa.pub.bak  known_hosts
+
+Зальем ключ на сервер , проверим ,работает ли вход без пароля :
+
+    outragee@outragee-X220:~/.ssh$ ssh-copy-id -i ~/.ssh/hw-5 Ivan_Rigalin@40.68.74.188
+    /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/outragee/.ssh/hw-5.pub"
+    /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+    /usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+    Password: 
+
+    Number of key(s) added: 1
+
+    Now try logging into the machine, with:   "ssh 'Ivan_Rigalin@40.68.74.188'"
+    and check to make sure that only the key(s) you wanted were added.
+
+    outragee@outragee-X220:~/.ssh$ ssh epam   
+    Last login: Mon Feb  1 07:56:13 2021 from 176.59.97.147
+    [Ivan_Rigalin@vm-one ~]$ 
+    [Ivan_Rigalin@vm-one ~]$ logout
+    Connection to 40.68.74.188 closed.
+    
+Проверим ,есть ли сервис на 80 порту:
+    
+    [Ivan_Rigalin@vm-one ~]$ curl -v telnet://10.0.0.5:80
+    * About to connect() to 10.0.0.5 port 80 (#0)
+    *   Trying 10.0.0.5...
+    * Connected to 10.0.0.5 (10.0.0.5) port 80 (#0)
+    
+    outragee@outragee-X220:~/.ssh$ nmap -Pn 40.68.74.188 -p 80
+    Starting Nmap 7.80 ( https://nmap.org ) at 2021-02-01 11:20 MSK
+    Nmap scan report for 40.68.74.188
+    Host is up.
+
+    PORT   STATE    SERVICE
+    80/tcp filtered http
+
+    Nmap done: 1 IP address (1 host up) scanned in 2.27 seconds
+
+
+ Теперь пробросим порт и проверим доступность из локалки:
+ 
+    outragee@outragee-X220:~/.ssh$ ssh -L 9999:localhost:80 Ivan_Rigalin@40.68.74.188
+    Last login: Mon Feb  1 08:38:44 2021 from 176.59.97.147
+
+    outragee@outragee-X220:~/.ssh$ curl -v telnet://localhost:9999
+    
+    *   Trying 127.0.0.1:9999...
+    * TCP_NODELAY set
+    * Connected to localhost (127.0.0.1) port 9999 (#0)
+
+
+ 
+
+    
+
+</details>
+
+</details>
  
  </details>
  </details>
