@@ -562,7 +562,26 @@ lsof
  
  <details><summary> SED </summary>
  
+ Переименуем все агенты в Lynx. Мы знаем что в столбце 12 у нас находятся данные о пользовательских браузерах. Свяжем выбор по столбцу AWK и Sed:
  
+ 
+    outragee@outragee-X220:~/epam/learning$ awk ' {print $12}' access.log | sed '/^"/c Lynx '   | head
+
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+    Lynx 
+ Если в итоге мы хотим сохранить результат в файл то :
+ 
+ `outragee@outragee-X220:~/epam/learning$ awk ' {print $12}' access.log | sed 's/^"/c Lynx /w output'  access.new`
+ 
+ 
+
  </details>
  </details>
  
