@@ -1226,7 +1226,50 @@ lsof
 
 </details>
 </details>
+
+
+</details>
+
+<details><summary>  Networking </summary> 
  
+ **Task#1**
+ 
+ Посмотрим какие есть интерфейсы выберем нужный нам- основной `enp0s3` :
+ 
+    2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:23:99:7d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.43.104/24 brd 192.168.43.255 scope global noprefixroute dynamic enp0s3
+
+ Через nmcli :
+ 
+    [centos1@centos1 ~]$ nmcli d s
+    DEVICE  TYPE      STATE         CONNECTION 
+    enp0s3  ethernet  connected     enp0s3     
+    enp0s8  ethernet  disconnected  --         
+    lo      loopback  unmanaged     --  
+ 
+    [centos1@centos1 ~]$ nmcli c s
+    NAME    UUID                                  TYPE      DEVICE 
+    enp0s3  f19d5aac-d9aa-4c81-a39e-145fdca9964a  ethernet  enp0s3 
+    enp0s8  b0f69025-bb04-47aa-9dd3-024488bec2bf  ethernet  --     
+
+Теперь добавим второй ip для enp0s3:
+    
+    nmcli c d enp0s3   # отключаем конект
+    nmcli c m enp0s3 +ipv4.addresses "10.0.0.1\30"  # добавляем второй адрес с маской 255.255.255.252 в подсети будет 2 адреса 
+    nmcli c m enp0s3 +ipv4.routes "10.0.0.1\30 192.168.43.255" # роутим сеть к шлюзу 
+    nmcli c m enp0s3 +ipv4.dns "192.168.43.1 8.8.8.8 8.8.4.4" # добавим днс 
+    nmcli c u enp0s3 # включим коннект
+    
+Зададим hostname и отредактируем файл /etc/hosts :
+
+    hostnamectl set-hostname andromeda
+    sudo vi /etc/hosts
+    
+    #добавим адрес
+    10.0.0.1    andromeda.com andromeda
+    127.0.0.1       localhost
+    
  
  </details>
  </details>
