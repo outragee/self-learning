@@ -1232,7 +1232,8 @@ lsof
 
 <details><summary> Задания лекций 11-12. ( Networking ) </summary> 
  
- **Task#1**
+ <details><summary> Task#1 (nmcli + dnsmasq)  </summary> 
+
  
  Посмотрим какие есть интерфейсы выберем нужный нам- основной `enp0s3` :
  
@@ -1300,9 +1301,138 @@ lsof
     Name:	andromeda.laba
     Address: 10.0.0.1
 
+</details>
+
+<details><summary> Task#2 (tcpdump and partyhard) </summary> 
+ 
+ Зайдем на второй адрес по ssh:
+ 
+    outragee@outragee-X220:~$ ssh vm
+    centos1@192.168.0.18's password: 
+    Last login: Tue Feb  9 09:40:33 2021 from andromeda.laba
+    [centos1@andromeda ~]$ ssh centos1@10.0.0.1
+    centos1@10.0.0.1's password: 
+    Last login: Tue Feb  9 12:46:47 2021 from 192.168.0.16
+    [centos1@andromeda ~]$ 
+
+Запустим TCPDUMP:
+   
+    [centos1@andromeda ~]$ sudo tcpdump  -p -t -i enp0s3 port 80 -vv
+    [sudo] password for centos1: 
+    tcpdump: listening on enp0s3, link-type EN10MB (Ethernet), capture size 262144 bytes
+
+Выполним запрос :
+
+
+`curl www.example.com`
+
+Через telnet: 
+
+   
+    telnet www.example.com 80
+    GET /index.html HTTP/1.1
+    Host: www.example.com
+    ## в конце 2 раза энтер.
+ 
+
+И посмотрим снова в 1 терминал:
+<details><summary> простыня TCPDUMP  </summary>
+   
 
 
 
+
+    IP (tos 0x10, ttl 64, id 32785, offset 0, flags [DF], proto TCP (6), length 60)
+    andromeda.33468 > 93.184.216.34.http: Flags [S], cksum 0xf6c3 (incorrect -> 0x0dea), seq 1853599587, win 29200, options [mss 1460,sackOK,TS val 18034546 ecr 0,nop,wscale 7], length 0
+    IP (tos 0x0, ttl 55, id 25329, offset 0, flags [none], proto TCP (6), length 60)
+    93.184.216.34.http > andromeda.33468: Flags [S.], cksum 0xedb1 (correct), seq 542252167, ack 1853599588, win 65535, options [mss 1452,sackOK,TS val 672935240 ecr 18034546,nop,wscale 9], length 0
+    IP (tos 0x10, ttl 64, id 32786, offset 0, flags [DF], proto TCP (6), length 52)
+    andromeda.33468 > 93.184.216.34.http: Flags [.], cksum 0xf6bb (incorrect -> 0x1afa), seq 1, ack 1, win 229, options [nop,nop,TS val 18034699 ecr 672935240], length 0
+    IP (tos 0x10, ttl 64, id 32787, offset 0, flags [DF], proto TCP (6), length 78)
+    andromeda.33468 > 93.184.216.34.http: Flags [P.], cksum 0xf6d5 (incorrect -> 0xd3b3), seq 1:27, ack 1, win 229, options [nop,nop,TS val 18072188 ecr 672935240], length 26: HTTP, length: 26
+	GET /index.html HTTP/1.1
+    IP (tos 0x0, ttl 55, id 30345, offset 0, flags [none], proto TCP (6), length 52)
+    93.184.216.34.http > andromeda.33468: Flags [.], cksum 0xf5ca (correct), seq 1, ack 27, win 128, options [nop,nop,TS val 672972880 ecr 18072188], length 0
+    IP (tos 0x10, ttl 64, id 32788, offset 0, flags [DF], proto TCP (6), length 76)
+    andromeda.33468 > 93.184.216.34.http: Flags [P.], cksum 0xf6d3 (incorrect -> 0x60d9), seq 27:51, ack 1, win 229, options [nop,nop,TS val 18085924 ecr 672972880], length 24: HTTP
+    IP (tos 0x0, ttl 55, id 32383, offset 0, flags [none], proto TCP (6), length 52)
+    93.184.216.34.http > andromeda.33468: Flags [.], cksum 0x8a62 (correct), seq 1, ack 51, win 128, options [nop,nop,TS val 672986616 ecr 18085924], length 0
+    IP (tos 0x10, ttl 64, id 32789, offset 0, flags [DF], proto TCP (6), length 54)
+    andromeda.33468 > 93.184.216.34.http: Flags [P.], cksum 0xf6bd (incorrect -> 0x7770), seq 51:53, ack 1, win 229, options [nop,nop,TS val 18087325 ecr 672986616], length 2: HTTP
+    IP (tos 0x0, ttl 55, id 32534, offset 0, flags [none], proto TCP (6), length 52)
+    93.184.216.34.http > andromeda.33468: Flags [.], cksum 0x7f6e (correct), seq 1, ack 53, win 128, options [nop,nop,TS val 672988017 ecr 18087325], length 0
+    IP (tos 0x0, ttl 55, id 32535, offset 0, flags [none], proto TCP (6), length 1664)
+    93.184.216.34.http > andromeda.33468: Flags [P.], cksum 0xfd07 (incorrect -> 0x1b4b), seq 1:1613, ack 53, win 128, options [nop,nop,TS val 672988018 ecr 18087325], length 1612: HTTP, length: 1612
+	   HTTP/1.1 200 OK
+	   Accept-Ranges: bytes
+	   Age: 454786
+	   Cache-Control: max-age=604800
+	   Content-Type: text/html; charset=UTF-8
+	   Date: Tue, 09 Feb 2021 18:24:36 GMT
+	   Etag: "3147526947+gzip"
+	   Expires: Tue, 16 Feb 2021 18:24:36 GMT
+	   Last-Modified: Thu, 17 Oct 2019 07:18:26 GMT
+	   Server: ECS (dcb/7F83)
+	   Vary: Accept-Encoding
+	   X-Cache: HIT
+	   Content-Length: 1256
+	
+	   <!doctype html>
+	   <html>
+	   <head>
+	       <title>Example Domain</title>
+	
+	       <meta charset="utf-8" />
+	       <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	       <meta name="viewport" content="width=device-width, initial-scale=1" />
+	       <style type="text/css">
+	       body {
+	           background-color: #f0f0f2;
+	           margin: 0;
+	           padding: 0;
+	           font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	        
+	       }
+	       div {
+	           width: 600px;
+	           margin: 5em auto;
+	           padding: 2em;
+	           background-color: #fdfdff;
+	           border-radius: 0.5em;
+	           box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+	       }
+	       a:link, a:visited {
+	           color: #38488f;
+	           text-decoration: none;
+	       }
+	       @media (max-width: 700px) {
+	           div {
+	               margin: 0 auto;
+	               width: auto;
+	           }
+	       }
+	       </style>    
+	   </head>
+	
+	   <body>
+	   <div>
+	       <h1>Example Domain</h1>
+	       <p>This domain is for use in illustrative examples in documents. You may use this
+	       domain in literature without prior coordination or asking for permission.</p>
+	       <p><a href="https://www.iana.org/domains/example">More information...</a></p>
+	   </div>
+	   </body>
+	   </html>
+    IP (tos 0x10, ttl 64, id 32790, offset 0, flags [DF], proto TCP (6), length 52)
+    andromeda.33468 > 93.184.216.34.http: Flags [.], cksum 0xf6bb (incorrect -> 0x780b), seq 53, ack 1613, win 254, options [nop,nop,TS val 18087477 ecr 672988018], length 0
+
+
+   
+</details>
+
+
+
+</details>
     
  </details>
  </details>
