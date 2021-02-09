@@ -1230,7 +1230,7 @@ lsof
 
 </details>
 
-<details><summary>  Networking </summary> 
+<details><summary> Задания лекций 11-12. ( Networking ) </summary> 
  
  **Task#1**
  
