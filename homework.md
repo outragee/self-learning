@@ -1221,7 +1221,7 @@ lsof
     -- Logs begin at Mon 2020-10-26 07:22:23 MSK, end at Mon 2021-02-01 13:23:47 MSK. --
     -- No entries --
     
-    
+   
 
 
 </details>
@@ -1267,10 +1267,43 @@ lsof
     sudo vi /etc/hosts
     
     #добавим адрес
-    10.0.0.1    andromeda.com andromeda
+    10.0.0.1    andromeda.laba andromeda
     127.0.0.1       localhost
     
- 
+Для выполнения резолва в частный днс установим Dnsmasq:
+`sudo yum install dnsmasq`
+
+Теперь настроим dnsmasq и перезапустим сервис:
+
+`sudo vim /etc/dnsmasq.conf`
+
+
+    server=8.8.8.8
+    local=/localnet/
+    address=/andromeda.laba/10.0.0.1
+     
+
+`sudo systemctl restart dnsmasq`
+
+
+Для того, чтобы обращения к DNS шли именно на dnsmasq на том же сервере, где он сам работает, необходимо указать первой записью в /etc/resolv.conf следующую строку:
+
+    nameserver 127.0.0.1
+
+
+Выполним поиск используя nslookup: 
+
+    [centos1@andromeda ~]$ nslookup andromeda.laba
+    Server:		127.0.0.1
+    Address:	127.0.0.1#53
+
+    Name:	andromeda.laba
+    Address: 10.0.0.1
+
+
+
+
+    
  </details>
  </details>
 
