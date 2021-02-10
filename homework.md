@@ -1519,7 +1519,17 @@ You have a problem with entity org.apache.hadoop.fs.FileSystem$Cache.getInternal
 
 
 </details>
-    
- </details>
- </details>
+</details>
 
+ <details><summary> Задания лекций 13-14 ( BASH )   </summary>    
+ 
+ ##1.## Find a sum of all running process' PIDs. Объединим через пайп ps aux и awk ,авк укажем столбец с pidами .
+
+	outragee@outragee-X220:~/epam$ ps aux | awk '{s+=$2}END{print s}'
+	3943879
+
+
+ </details>
+ 
+ </details>
+ </details>
