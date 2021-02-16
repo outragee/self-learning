@@ -1796,5 +1796,161 @@ Task2:
  
  </details>
  
+ <details><summary> Задания лекций 17-18 ( Partitions and LVM )  </summary>
+ 
+ <details><summary> task1  </summary>
+ Добавим еще 1 диск нашей виртуальной машине и проверим что мы его добавили корректно:
+	
+	
+	[centos1@andromeda ~]$ lsblk 
+	NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+	sda               8:0    0    6G  0 disk 
+	├─sda1            8:1    0    1G  0 part /boot
+	└─sda2            8:2    0    5G  0 part 
+  	  ├─centos-root 253:0    0  4,4G  0 lvm  /
+  	  └─centos-swap 253:1    0  616M  0 lvm  [SWAP]
+	sdb               8:16   0    5G  0 disk 
+	sr0              11:0    1 1024M  0 rom  
+Наглядно видим sdb - это и есть наш новый диск.
+
+
+Перейдем к созданию портишнов:
+
+	[centos1@andromeda ~]$ sudo fdisk /dev/sdb 
+	Welcome to fdisk (util-linux 2.23.2).
+
+	Command (m for help): g   
+	Building a new GPT disklabel (GUID: 89D4FAF6-2D87-4BE9-A006-A41CD7974C1C)
+
+
+	Command (m for help): n
+	Partition number (1-128, default 1): 1
+	First sector (2048-10485726, default 2048): 
+	Last sector, +sectors or +size{K,M,G,T,P} (2048-10485726, default 10485726): +2G
+	Created partition 1
+
+
+	Command (m for help): p
+
+	Disk /dev/sdb: 5368 MB, 5368709120 bytes, 10485760 sectors
+	Units = sectors of 1 * 512 = 512 bytes
+	Sector size (logical/physical): 512 bytes / 512 bytes
+	I/O size (minimum/optimal): 512 bytes / 512 bytes
+	Disk label type: gpt
+	Disk identifier: 71EB548A-2922-4AB9-B337-9BF6BDA79184
+
+
+	#         Start          End    Size  Type            Name
+ 	1         2048      4196351      2G  Linux filesyste
+
+	Command (m for help): n 
+	Partition number (2-128, default 2): 2
+	First sector (4196352-10485726, default 4196352): 
+	Last sector, +sectors or +size{K,M,G,T,P} (4196352-10485726, default 10485726): +512M
+	Created partition 2
+	
+	Command (m for help): t
+	Partition number (1,2, default 2): 2
+	Partition type (type L to list all types): 19
+	
+	Changed type of partition 'Linux filesystem' to 'Linux swap'
+
+	Command (m for help): p
+
+	Disk /dev/sdb: 5368 MB, 5368709120 bytes, 10485760 sectors
+	Units = sectors of 1 * 512 = 512 bytes
+	Sector size (logical/physical): 512 bytes / 512 bytes
+	I/O size (minimum/optimal): 512 bytes / 512 bytes
+	Disk label type: gpt
+	Disk identifier: 71EB548A-2922-4AB9-B337-9BF6BDA79184
+
+
+	#         Start          End    Size  Type            Name
+	1         2048      4196351      2G  Linux filesyste 
+ 	2      4196352      5244927    512M  Linux swap      
+
+Отключим swap:
+
+	[centos1@andromeda ~]$ sudo swapoff -a
+
+Теперь подключим наш новый swap:
+	
+	[centos1@andromeda ~]$ sudo mkswap /dev/sdb2
+	Setting up swapspace version 1, size = 524284 KiB
+	no label, UUID=09e9e5b1-c668-43e3-aaae-f7fab6996e6c
+
+Отформатируем наш 2хгиговый портишн в xfs:
+
+	[centos1@andromeda ~]$ sudo mkfs.xfs /dev/sdb1 
+	meta-data=/dev/sdb1              isize=512    agcount=4, agsize=131072 blks
+      	   	 =                       sectsz=512   attr=2, projid32bit=1
+        	 =                       crc=1        finobt=0, sparse=0
+	data     =                       bsize=4096   blocks=524288, imaxpct=25
+         	 =                       sunit=0      swidth=0 blks
+	naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+	log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+	realtime =none                   extsz=4096   blocks=0, rtextents=0
+
+
+Создадим директорию /backup , затем примонтируем туда наш партишн:
+
+
+	[centos1@andromeda ~]$ sudo mkdir /backup 
+	[centos1@andromeda ~]$ sudo mount /dev/sdb1 /backup/
+	[centos1@andromeda ~]$ df -H
+	Filesystem               Size  Used Avail Use% Mounted on
+	devtmpfs                 508M     0  508M   0% /dev
+	tmpfs                    520M     0  520M   0% /dev/shm
+	tmpfs                    520M  7,1M  513M   2% /run
+	tmpfs                    520M     0  520M   0% /sys/fs/cgroup
+	/dev/mapper/centos-root  4,8G  1,7G  3,1G  36% /
+	/dev/sda1                1,1G  176M  888M  17% /boot
+	tmpfs                    104M     0  104M   0% /run/user/1000
+	/dev/sdb1                2,2G   34M  2,2G   2% /backup
+
+В финале запишем изменения для /etc/fstab :
+
+	[centos1@andromeda ~]$ cat /etc/fstab 
+	#
+	# /etc/fstab
+	# Created by anaconda on Fri Feb  5 03:24:11 2021
+	#
+	# Accessible filesystems, by reference, are maintained under '/dev/disk'
+	# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+	#
+	/dev/mapper/centos-root /                       xfs     defaults        0 0
+	UUID=7c34ecb6-ff4e-4b51-b699-c5b0303aaffd /boot                   xfs     defaults        0 0
+	/dev/mapper/centos-swap swap                    swap    defaults        0 0
+	/dev/sdb1	/backup		xfs	defaults	1 2
+	/dev/sdb2	swap	swap	defaults	0 0
+	
+Ребут и проверка точки монтирования:
+
+	[centos1@andromeda ~]$ sudo reboot
+	[sudo] password for centos1: 
+	Connection to 192.168.0.19 closed by remote host.
+	Connection to 192.168.0.19 closed.
+	outragee@outragee-X220:~$ ssh vm
+	centos1@192.168.0.19's password: 
+	Last login: Tue Feb 16 11:04:20 2021 from 192.168.0.17
+	[centos1@andromeda ~]$ df -H
+	Filesystem               Size  Used Avail Use% Mounted on
+	devtmpfs                 508M     0  508M   0% /dev
+	tmpfs                    520M     0  520M   0% /dev/shm
+	tmpfs                    520M  7,1M  513M   2% /run
+	tmpfs                    520M     0  520M   0% /sys/fs/cgroup
+	/dev/mapper/centos-root  4,8G  1,7G  3,1G  36% /
+	/dev/sda1                1,1G  176M  888M  17% /boot
+	/dev/sdb1                2,2G   34M  2,2G   2% /backup
+	tmpfs                    104M     0  104M   0% /run/user/1000
+
+
+
+	
+ </details>
+	
+ </details>
+ 
  </details>
  </details>
