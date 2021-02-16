@@ -367,8 +367,29 @@ Task2:
 	** Сделать то же самое, используя файл Unix socket (подсказка: используйте пакеты netcat и socat)
  </details>
 
+<details><summary>  Задания лекций 17-18 ( Partitions and LVM )  </summary>
 
+	1. Imagine you was asked to add new partition to your host for backup purposes. To simulate appearance of new physical disk in your server, please create new disk in Virtual Box (5 GB) and attach it to your virtual machine.
+	Also imagine your system started experiencing RAM leak in one of the applications, thus while developers try to debug and fix it, you need to mitigate OutOfMemory errors; you will do it by adding some swap space.
+	/dev/sdc - 5GB disk, that you just attached to the VM (in your case it may appear as /dev/sdb, /dev/sdc or other, it doesn't matter)
+	1.1. Create a 2GB   !!! GPT !!!   partition on /dev/sdc of type "Linux filesystem" (means all the following partitions created in the following steps on /dev/sdc will be GPT as well)
+	1.2. Create a 512MB partition on /dev/sdc of type "Linux swap"
+	1.3. Format the 2GB partition with an XFS file system
+	1.4. Initialize 512MB partition as swap space
+	1.5. Configure the newly created XFS file system to persistently mount at /backup
+	1.6. Configure the newly created swap space to be enabled at boot
+	1.7. Reboot your host and verify that /dev/sdc1 is mounted at /backup and that your swap partition  (/dev/sdc2) is enabled
 
+	2. LVM. Imagine you're running out of space on your root device. As we found out during the lesson default CentOS installation should already have LVM, means you can easily extend size of your root device. So what are you waiting for? Just do it!
+	2.1. Create 2GB partition on /dev/sdc of type "Linux LVM"
+	2.2. Initialize the partition as a physical volume (PV)
+	2.3. Extend the volume group (VG) of your root device using your newly created PV
+	2.4. Extend your root logical volume (LV) by 1GB, leaving other 1GB unassigned
+	2.5. Check current disk space usage of your root device
+	2.6. Extend your root device filesystem to be able to use additional free space of root LV
+	2.7. Verify that after reboot your root device is still 1GB bigger than at 2.5.
+	
+</details>
 
 ## Решения:
  
@@ -1544,6 +1565,25 @@ Task2:
 
 </details>
 </details>
+
+<details><summary>  nmap (найти все открытые порты на удаленной машине) </summary>
+
+Выполним сканирование всех портов ( некрасиво и медленно ):
+	
+	outragee@outragee-X220:~$ sudo nmap -Pn -p- 79.134.223.227
+	Starting Nmap 7.80 ( https://nmap.org ) at 2021-02-16 15:18 MSK
+	Nmap scan report for 79-134-223-227.obit.ru (79.134.223.227)
+	Host is up (0.022s latency).
+	Not shown: 65534 filtered ports
+	PORT      STATE SERVICE
+	60022/tcp open  unknown
+	
+	Nmap done: 1 IP address (1 host up) scanned in 11626.06 seconds
+
+	
+
+</details>
+
 
 <details><summary>  TCPDUMP + ICMP on remote host 45.88.76.32 </summary>
 
