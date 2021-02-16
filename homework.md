@@ -335,7 +335,36 @@ You have a problem with entity org.apache.hadoop.fs.FileSystem$Cache.getInternal
 2. Write a RegEx that validates entries under `/etc/passwd`.
 
 3. \* (just if you're very interested :)). Write a RegEx that will validate URI: https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+  </details>
  
+ <details><summary>  Задания лекций 15-16 ( RPM/YUM, Files and file systems )  </summary>
+
+task1:
+	
+	- Подключить репозиторий docker community edition
+	- Установить docker-ce версии 19.03.14
+	- Убедиться, что установлена нужная версия
+	- Обновить docker-ce до последней версии
+	- Вывести список последних операций yum
+	- Вывести полную информацию об установленном ранее пакете
+	- Удалить docker-ce
+
+Task2:
+
+	- Переместить mlocate.db в новое место
+	- Создать новый файл file_task16.txt с любым содержанием и добавить информацию о нём в новый mlocate.db
+	- Найти файл file_task16.txt через locate и вывести его содержимое на экран (без явного указания полного пути к файлу)
+	- Создать хардлинк на file_task16.txt, назвать его file_task16_hard.txt
+	- Внести любые изменения в file_task16.txt
+	- Удалить file_task16.txt
+	- Вывести на экран file_task16_hard.txt, убедиться, что в нём отражены изменения
+	* Создать именованный пайп pipe01
+	  В первом терминале запустить считывание с pipe01 (любым способом, можно перечислить несколько)
+	  Создать софтлинк на пайп, назвать его pipe01-s
+	  Во втором терминале отправить в pipe01-s данные (любым способом, можно перечислить несколько)
+	  Убедиться, что данные были считаны первым терминалом
+	  # mkfifo
+	** Сделать то же самое, используя файл Unix socket (подсказка: используйте пакеты netcat и socat)
  </details>
 
 
@@ -1573,6 +1602,8 @@ You have a problem with entity org.apache.hadoop.fs.FileSystem$Cache.getInternal
  
 
  
+ <details><summary> Задания лекций 15-16 ( RPM/YUM, Files and file systems )  </summary>
+ </details>
  
  </details>
  </details>
