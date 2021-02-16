@@ -1513,9 +1513,49 @@ You have a problem with entity org.apache.hadoop.fs.FileSystem$Cache.getInternal
     andromeda.33468 > 93.184.216.34.http: Flags [.], cksum 0xf6bb (incorrect -> 0x780b), seq 53, ack 1613, win 254, options [nop,nop,TS val 18087477 ecr 672988018], length 0
 
 
-   
+</details>
 </details>
 
+<details><summary>  TCPDUMP + ICMP on remote host 45.88.76.32 </summary>
+
+Зайдем на хост выполнив ssh,
+Посмотрим интерфейсы  найдем интересующий нас адрес:
+
+`ip a`
+	
+	2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+
+
+	
+
+
+
+ От лица суперпользователя выполним tcpdump:
+ 
+Укажем флаги : -A - сообщения в ASCII формате , -tttt human readable , -vv verbosity ,  -S - позволяет не обрабатывать абсолютные порядковые номера в относительные и -nn 	отображать IP адреса и номера портов вместо имени хостов и названия протоколов. Укажем что нас интересует icmp и только поступающий на хост dst host 45.88.76.32.
+
+`sudo /usr/sbin/tcpdump -A -ttttnnvvS -i eth0 icmp and dst host 45.88.76.32`
+ 
+ 	2021-02-16 11:40:06.038848 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	35.180.189.228 > 45.88.76.32: ICMP echo request, id 5, seq 17194, length 64
+	E..T....".=.#...-XL ...:..C*.d7.....................................................
+	2021-02-16 11:40:11.163837 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	35.180.110.164 > 45.88.76.32: ICMP echo request, id 11, seq 2267, length 64
+	E..T...."...#.n.-XL .........d7.....................................................
+	2021-02-16 11:40:19.176687 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	35.180.169.86 > 45.88.76.32: ICMP echo request, id 17, seq 4533, length 64
+	E..T....".R'#..V-XL ..w......d7..I3X................................................
+	2021-02-16 11:40:19.848917 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	35.180.119.108 > 45.88.76.32: ICMP echo request, id 1, seq 5235, length 64
+	E..T...."...#.wl-XL ..-....s.d7..DR.................................................
+	2021-02-16 11:40:28.581583 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	15.188.77.34 > 45.88.76.32: ICMP echo request, id 30, seq 8848, length 64
+	E..T...."..S..M"-XL ...H.."..d7.....................................................
+	2021-02-16 11:40:34.239863 IP (tos 0x0, ttl 34, id 0, offset 0, flags [none], proto ICMP (1), length 84)
+    	52.47.132.237 > 45.88.76.32: ICMP echo request, id 13, seq 6228, length 64
+	E..T....".f.4/..-XL ..q....T.d7.o...................................................
+
+ </details>
 
 
 </details>
@@ -1530,6 +1570,9 @@ You have a problem with entity org.apache.hadoop.fs.FileSystem$Cache.getInternal
 
 
  </details>
+ 
+
+ 
  
  </details>
  </details>
