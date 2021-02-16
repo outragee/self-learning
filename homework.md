@@ -1603,6 +1603,157 @@ Task2:
 
  
  <details><summary> Задания лекций 15-16 ( RPM/YUM, Files and file systems )  </summary>
+ 
+ <details><summary> task1 </summary>
+ Установим yum-utils пакет который предоставляет yum-config-manager утилиту и добавим стабильный репозиторий.
+
+
+`sudo yum install -y yum-utils`
+`sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo`
+  
+ 
+ Выполним установку нужной версии докера : 
+ 
+
+`sudo yum install docker-ce-19.03.14-3.el7 docker-ce-cli-19.03.14-3.el7 containerd.io`
+
+
+ Проверим версию:
+
+	[centos1@andromeda ~]$ docker -v
+	Docker version 19.03.14, build 5eb3275d40
+	
+	
+Обновим все пакеты (хотя можно обновить только докер ) и проверим версию докера снова:
+ 	
+	[centos1@andromeda ~]$ docker -v
+	Docker version 20.10.3, build 48d30b5
+
+Посмотрим последние операции в yum:
+
+	[centos1@andromeda ~]$ sudo yum history 
+	[sudo] password for centos1: 
+	Loaded plugins: fastestmirror
+	ID     | Login user               | Date and time    | Action(s)      | Altered
+	-------------------------------------------------------------------------------
+    	14 | centos1 <centos1>        | 2021-02-16 09:46 | I, U           |   81   
+    	13 | centos1 <centos1>        | 2021-02-16 09:43 | Install        |    3   
+    	12 | centos1 <centos1>        | 2021-02-16 09:41 | Erase          |    3   
+    	11 | centos1 <centos1>        | 2021-02-16 09:40 | Install        |    3   
+    	10 | centos1 <centos1>        | 2021-02-16 09:39 | Erase          |    4   
+     	9 | centos1 <centos1>        | 2021-02-16 09:28 | Install        |   15   
+     	8 | centos1 <centos1>        | 2021-02-16 09:27 | Install        |    4   
+     	7 | centos1 <centos1>        | 2021-02-09 10:01 | Install        |    1   
+     	6 | centos1 <centos1>        | 2021-02-09 09:47 | Install        |    2   
+     	5 | centos1 <centos1>        | 2021-02-09 09:00 | Install        |   31   
+     	4 | centos1 <centos1>        | 2021-02-09 08:22 | Install        |    2   
+     	3 | centos1 <centos1>        | 2021-02-05 06:52 | Install        |    6   
+     	2 | centos1 <centos1>        | 2021-02-05 04:13 | Install        |    1   
+     	1 | System <unset>           | 2021-02-05 03:24 | Install        |  301   
+	history list
+	[centos1@andromeda ~]$ 
+
+
+Удалим docker:
+
+
+`sudo yum remove docker-ce docker-ce-cli containerd.io`
+
+	Removed:
+  	containerd.io.x86_64 0:1.4.3-3.1.el7  docker-ce.x86_64 3:20.10.3-3.el7  docker-ce-cli.x86_64 1:20.10.3-3.el7 
+
+	Dependency Removed:
+  	docker-ce-rootless-extras.x86_64 0:20.10.3-3.el7     
+
+
+`sudo rm -rf /var/lib/docker`
+
+
+Посмотрим сведения о пакете docker:
+
+	[centos1@andromeda ~]$ yum info docker
+	Loaded plugins: fastestmirror
+	Loading mirror speeds from cached hostfile
+ 	* base: mirror.logol.ru
+ 	* extras: centos-mirror.rbc.ru
+ 	* updates: centos-mirror.rbc.ru
+	Available Packages
+	Name        : docker
+	Arch        : x86_64
+	Epoch       : 2
+	Version     : 1.13.1
+	Release     : 203.git0be3e21.el7.centos
+	Size        : 18 M
+	Repo        : extras/7/x86_64
+	Summary     : Automates deployment of containerized applications
+	URL         : https://github.com/docker/docker
+	License     : ASL 2.0
+	Description : Docker is an open-source engine that automates the deployment of any
+        	    : application as a lightweight, portable, self-sufficient container that will
+            	: run virtually anywhere.
+           	 : 
+            	: Docker containers can encapsulate any payload, and will run consistently on
+            	: and between virtually any server. The same container that a developer builds
+            	: and tests on a laptop will run at scale, in production*, on VMs, bare-metal
+           	 : servers, OpenStack clusters, public instances, or combinations of the above.
+
+
+ </details>
+ 
+ <details><summary> task2 </summary>
+ 
+ Поскольку Locate db у меня вообще не была установлена , то :
+ 
+ 
+ `sudo yum install mlocate -y`
+ 
+ 
+ Теперь создадим файл c содержанием:
+ 
+ 
+ `vim /home/centos1/file_task16.txt`
+ 
+ 	test example locate
+ 
+ 
+ Обновим данные базы данных:
+ 
+ 
+ `sudo updatedb`
+ 
+ 
+ Узнаем где у нас находится наш созданный файл используя locate:
+ 
+ 	
+	[centos1@andromeda ~]$ locate file_task16.txt 
+	/home/centos1/file_task16.txt
+
+Создадим хардлинк:
+
+	[centos1@andromeda ~]$ ln /home/centos1/file_task16.txt /home/centos1/file_task16_hard.txt
+	[centos1@andromeda ~]$ ls
+	file_task16_hard.txt  file_task16.txt  
+
+Внесем изменения в файл:
+
+	[centos1@andromeda ~]$ cat file_task16.txt 
+	This is test example locate
+	
+Удалим file_task16.txt:
+
+	[centos1@andromeda ~]$ rm file_task16.txt 
+	[centos1@andromeda ~]$ ls
+	file_task16_hard.txt 
+
+Проверим что данные сохраненные в удаленном файле ранее, остались в _hard.txt :
+
+	[centos1@andromeda ~]$ cat file_task16_hard.txt 
+	This is test example locate
+
+ </details>
+ 
  </details>
  
  </details>
