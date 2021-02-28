@@ -1949,8 +1949,68 @@ Task2:
 
 	
  </details>
+ 
+ 
+ <details><summary> task2 (LVM)  </summary>
+ Как и в 1 таске, создадим партишн в формате "Linux LVM". Убедимся что все сделано верно:
+	
+	#         Start          End    Size  Type            Name
+ 	1         2048      4196351      2G  Linux filesyste 
+ 	2      4196352      5244927    512M  Linux swap      
+	3      5244928      9439231      2G  Linux LVM      <-----Это и есть ранее созданный портишн 
+
+
+Теперь заинициализируем наш физический том. 
+
+	 [centos1@andromeda ~]$ sudo pvcreate /dev/sdb3
+   	 Physical volume "/dev/sdb3" successfully created.
+
+	 [centos1@andromeda ~]$ sudo pvs
+  	 PV         VG     Fmt  Attr PSize  PFree
+  	 /dev/sda2  centos lvm2 a--  <5,00g    0 
+  	 /dev/sdb3         lvm2 ---   2,00g 2,00g
+
+Расширим пространство уже имеющейся группы Vg:
+
+	[centos1@andromeda ~]$ sudo vgs
+  	VG     #PV #LV #SN Attr   VSize  VFree
+  	centos   1   2   0 wz--n- <5,00g    0 
+	[centos1@andromeda ~]$ sudo lvs
+ 	 LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+ 	 root centos -wi-ao----   4,39g                                                    
+ 	 swap centos -wi-ao---- 616,00m   
+	
+	[centos1@andromeda ~]$ sudo vgextend centos /dev/sdb3 
+  	Volume group "centos" successfully extended
+
+	[centos1@andromeda ~]$ sudo vgs
+ 	 VG     #PV #LV #SN Attr   VSize VFree 
+  	centos   2   2   0 wz--n- 6,99g <2,00g
+	
+Расширим корневое пространство (однако у меня места впритык,поэтому) :
+	
+	[centos1@andromeda ~]$ sudo lvextend -l +510 /dev/centos/root 
+  	Size of logical volume centos/root changed from 4,39 GiB (1125 extents) to <6,39 GiB (1635 extents).
+ 	 Logical volume centos/root successfully resized.
+	[centos1@andromeda ~]$ sudo vgs
+ 	 VG     #PV #LV #SN Attr   VSize VFree
+ 	 centos   2   2   0 wz--n- 6,99g 4,00m
+
+Ребут и проверка:
+
+	[centos1@andromeda ~]$ sudo reboot
+	Connection to 192.168.0.15 closed by remote host.
+	Connection to 192.168.0.15 closed.
+	outragee@outragee-X220:~$ ssh centos1@192.168.0.15
+	Last login: Sun Feb 28 04:45:40 2021 from 192.168.0.13
+	[centos1@andromeda ~]$ sudo vgs
+	[sudo] password for centos1: 
+  	VG     #PV #LV #SN Attr   VSize VFree
+  	centos   2   2   0 wz--n- 6,99g 4,00m
+
 	
  </details>
  
+ </details>
  </details>
  </details>
