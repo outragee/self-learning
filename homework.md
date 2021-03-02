@@ -390,6 +390,23 @@ Task2:
 	2.7. Verify that after reboot your root device is still 1GB bigger than at 2.5.
 	
 </details>
+<details><summary>  Задания лекций 19-20 ( Boot and iptables )  </summary>
+	
+Boot process:
+
+1.* Self-study: find a utility to inspect initrd file contents. Find all files that are related to XFS filesystem and give a short description for every file.
+	
+2.* Self-study: explain the difference between ordinary and rescue initrdimages.
+	
+3.* Self-study: study dracut utility that is used for rebuilding initrd image. Give an example for adding driver/kernel module for your initrd and recreating it.
+
+4.Enable recovery options for grub, update main configuration file and find newitem in GRUB2 config in /boot.
+
+5.Modify option vm.dirty_ratio:a.using sysctl utilityb.using sysctl configuration file6.Disable selinux using kernel cmdlineiptables:With enabled firewalld:1.Add rule using firewall-cmd that will allow SSH access to your server *only* from network 192.168.56.0/24 and interface enp0s8 (if your network and/on interface name differs - change it accordingly).
+	
+5.2.Shutdown firewalld and add the same rules via iptables.
+	
+</details>
 
 ## Решения:
  
