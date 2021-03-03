@@ -2027,7 +2027,93 @@ Boot process:
 
 	
  </details>
- 
+ </details>
+ <details><summary>  Задания лекций 19-20 ( Boot and iptables )  </summary>
+ Изменим параметр vm.dirty_ratio. Используя утилиту sysctl:
+	
+	[centos1@andromeda ~]$ sysctl vm.dirty_ratio
+	vm.dirty_ratio = 30
+	[centos1@andromeda ~]$ sudo sysctl -w vm.dirty_ratio=10 
+	vm.dirty_ratio = 10[centos1@andromeda ~]$ sudo sysctl vm.dirty_ratio 
+	vm.dirty_ratio = 10
+
+	
+	
+Изменим параметр vm.dirty_ratio: Используя файл конфигурации sysctl (конфиг файл расположен в /etc/sysctl.conf):
+	
+Откроем редактором и добавим строку:
+	
+	[centos1@andromeda ~]$ sudo vim /etc/sysctl.conf 
+	vm.dirty_ratio=15
+	[centos1@andromeda ~]$ sudo sysctl -p
+	vm.dirty_ratio = 15
+
+Firewalld and Iptables:
+Создадим зону Epam на интерфейсе enp0s3, в качестве сервиса запустим только ssh ,а в качестве источника укажем мою подсеть.
+
+	[centos1@andromeda ~]$ sudo firewall-cmd --permanent --new-zone=epam
+	success
+	[centos1@andromeda ~]$ sudo firewall-cmd --set-default-zone="epam"
+	success
+	[centos1@andromeda ~]$ sudo firewall-cmd --add-service=ssh --zone=epam
+	success
+	[centos1@andromeda ~]$ sudo firewall-cmd --list-services --zone=epam
+	ssh
+	[centos1@andromeda ~]$ sudo firewall-cmd --permanent --zone=epam --add-source=192.168.0.1/24
+	success
+ 	[centos1@andromeda ~]$ sudo  firewall-cmd --permanent --zone=epam --add-interface=enp0s3
+	The interface is under control of NetworkManager, setting zone to 'epam'.
+	success
+	[centos1@andromeda ~]$ sudo firewall-cmd --permanent --zone=epam --list-sources 
+	192.168.0.16/24
+
+Выключим firewalld и настроим iptables:
+
+	[centos1@andromeda ~]$ sudo yum install iptables-services
+	[centos1@andromeda ~]$ sudo systemctl enable iptables
+	[centos1@andromeda ~]$ sudo systemctl start iptables
+	[centos1@andromeda ~]$ sudo systemctl disable firewalld
+	[centos1@andromeda ~]$ sudo systemctl mask firewalld
+!!! На данном этапе у меня имеется уже ранее сконфигурированный предварительно файл iptables.sh , положим его в /etc/  , затем сделаем исполняемым и выполним. 
+Отредактируем наш файл и разрешим доступ к ssh из моей подсети только.
+	
+	iptables -A INPUT -s 192.168.0.16/24 -m state --state NEW -p tcp --dport 22 -j ACCEPT
+	iptables -A INPUT -s 192.168.0.15/24 -m state --state NEW -p tcp --dport 22 -j ACCEPT
+
+Посмотрим на правила:
+
+	[centos1@andromeda etc]$ sudo iptables -L -v -n
+	Chain INPUT (policy DROP 16 packets, 4160 bytes)
+ 	pkts bytes target     prot opt in     out     source               destination         
+   	0     0 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0           
+   	0     0 ACCEPT     all  --  eth1   *       0.0.0.0/0            0.0.0.0/0           
+    	2   168 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 0
+   	0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 3
+    	0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 11
+    	0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            icmptype 8
+   	83  5955 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    	0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+    	0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:0x3F/0x00
+    	0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:!0x17/0x02 state NEW
+    	0     0 ACCEPT     tcp  --  *      *       192.168.0.0/24       0.0.0.0/0            state NEW tcp dpt:22
+    	0     0 ACCEPT     tcp  --  *      *       192.168.0.0/24       0.0.0.0/0            state NEW tcp dpt:22
+
+	Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ 	pkts bytes target     prot opt in     out     source               destination         
+    	0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    	0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            state INVALID
+    	0     0 ACCEPT     all  --  eth1   enp0s3  0.0.0.0/0            0.0.0.0/0           
+    	0     0 REJECT     all  --  enp0s3 eth1    0.0.0.0/0            0.0.0.0/0            reject-with icmp-port-unreachable
+
+	Chain OUTPUT (policy DROP 0 packets, 0 bytes)
+ 	pkts bytes target     prot opt in     out     source               destination         
+    	0     0 ACCEPT     all  --  *      lo      0.0.0.0/0            0.0.0.0/0           
+    	0     0 ACCEPT     all  --  *      eth1    0.0.0.0/0            0.0.0.0/0           
+   	51 11125 ACCEPT     all  --  *      enp0s3  0.0.0.0/0            0.0.0.0/0           
+    	0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
+    	0     0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp flags:!0x17/0x02 state NEW
+
+	
  </details>
  </details>
  </details>
