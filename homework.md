@@ -1654,6 +1654,45 @@ Boot process:
 	outragee@outragee-X220:~/epam$ ps aux | awk '{s+=$2}END{print s}'
 	3943879
 
+ ##3.## Напишем скрипт ,он будет выполняться в цикле,пока пользователь не введет верный ответ.
+ Скрипт :
+ 
+ 	#!/bin/bash
+
+	echo -n "Enter my favorite word or phrase: "
+	read -r string
+	while [[ "$string" != "apple" ]]; do
+        	echo "No, it's not what I want! Please try again"
+        	read -r string
+	done
+	if [[ $string = "apple" ]]
+	then
+  	  	echo "Yes , this is my favorite word! Thank you, bye!"
+	fi
+Выполним:
+	
+	[centos1@andromeda ~]$ ./test1.sh 
+	Enter my favorite word or phrase: afa
+	No, it's not what I want! Please try again
+	123
+	No, it's not what I want! Please try again
+	!
+	No, it's not what I want! Please try again
+	apple
+	Yes , this is my favorite word! Thank you, bye!
+
+##4.## 
+Перепишем скрипт :
+
+	#!/bin/bash
+	export SUM;
+	for f in $(find . -name "*.java");do
+ 	 num=$(($SUM + $(wc -l $f | awk '{ print $1 }')))
+	done
+	echo "Количество строк во всех файлах java = " $num 
+
+	[centos1@andromeda ~]$ ./vision.sh 
+	Количество строк во всех файлах java =  6
 
  </details>
  
