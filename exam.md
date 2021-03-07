@@ -319,6 +319,7 @@
         [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount1/namenode-dir/
         [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount2/namenode-dir/
         
+        
 Для VM2:
 
         [exam@centos1 mount1]$ sudo mkdir datanode-dir
@@ -326,7 +327,9 @@
         [exam@centos1 mount1]$ sudo chown hdfs:hadoop /opt/mount1/datanode-dir/
         [exam@centos1 mount1]$ sudo chown hdfs:hadoop /opt/mount2/datanode-dir/
 
+
 Для VM1 и VM2:
+
 
         [exam@centos1 mount1]$ sudo mkdir nodemanager-local-dir
         [exam@centos1 mount1]$ sudo mkdir /opt/mount2/nodemanager-local-dir
