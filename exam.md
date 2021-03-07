@@ -81,7 +81,92 @@
                                                              w — записать изменения на диск
         [exam@centos2 ~]$ sudo fdisk /dev/sdc #второй диск , аналогично.
          
-        Создание физического тома.  Выполняется с помощью команды pvcreate с указанием диска  созданного на предыдущем шаге. Выполняется для каждого используемого устройства.
+         
+        #Создание физического тома.  Выполняется с помощью команды pvcreate с указанием диска  созданного на предыдущем шаге. Выполняется для каждого используемого устройства.
+        
+        [exam@centos2 ~]$ sudo pvcreate /dev/sdb1 
+        Physical volume "/dev/sdb1" successfully created.
+        [exam@centos2 ~]$ sudo pvcreate /dev/sdc1 
+        Physical volume "/dev/sdc1" successfully created.
+        [exam@centos2 ~]$ sudo pvs
+        PV         VG     Fmt  Attr PSize    PFree   
+        /dev/sda2  centos lvm2 a--    <4.00g       0 
+        /dev/sdb1         lvm2 ---  1023.00m 1023.00m
+        /dev/sdc1         lvm2 ---  1023.00m 1023.00m
+        
+        #Создание группы томов. Для создания пула из одного или нескольких физических устройств используется утилита vgcreate.        
+        
+        [exam@centos2 ~]$ sudo vgcreate exam /dev/sdb1
+        Volume group "exam" successfully created
+        [exam@centos2 ~]$ sudo vgcreate exam2 /dev/sdc1
+        Volume group "exam2" successfully created
+        [exam@centos2 ~]$ sudo vgdisplay
+        --- Volume group ---
+        VG Name               exam
+        System ID             
+        Format                lvm2
+        Metadata Areas        1
+        Metadata Sequence No  3
+        VG Access             read/write
+        VG Status             resizable
+        MAX LV                0
+        Cur LV                0
+        Open LV               0
+        Max PV                0
+        Cur PV                1
+        Act PV                1
+        VG Size               1020.00 MiB
+        PE Size               4.00 MiB
+        Total PE              255
+        Alloc PE / Size       0 / 0   
+        Free  PE / Size       255 / 1020.00 MiB
+        VG UUID               ZaCQfS-qOgy-JRkv-yY91-0zTU-Vkgr-oWLewu
+   
+        --- Volume group ---
+        VG Name               exam2
+        System ID             
+        Format                lvm2
+        Metadata Areas        1
+        Metadata Sequence No  1
+        VG Access             read/write
+        VG Status             resizable
+        MAX LV                0
+        Cur LV                0
+        Open LV               0
+        Max PV                0
+        Cur PV                1
+        Act PV                1
+        VG Size               1020.00 MiB
+        PE Size               4.00 MiB
+        Total PE              255
+        Alloc PE / Size       0 / 0   
+        Free  PE / Size       255 / 1020.00 MiB
+        VG UUID               NVIQWL-Kay2-CASy-CkXL-7ePf-fBPH-FavHin
+
+
+
+        #Создание логического тома в созданной группе томов. LVM предоставляет возможность использовать как все пространство созданной группы томов под один логический том, так и создать несколько логических томов.
+        #Флаги -L (весь размер),  можно указать -l — в таком случае можно в качестве размера логического тома указывать количество  используемых экстентов или же указать размер в процентах от свободного пространств
+        
+        [exam@centos2 ~]$ sudo lvcreate -l +100%FREE -n logs_exam exam
+        Logical volume "logs_exam" created.
+        [exam@centos2 ~]$ sudo lvcreate -l +100%FREE -n logs2_exam exam2
+        Logical volume "logs2_exam" created.
+        [exam@centos2 ~]$ sudo lvs
+        LV         VG     Attr       LSize    Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+        root       centos -wi-ao----   <3.50g                                                    
+        swap       centos -wi-ao----  512.00m                                                    
+        logs_exam  exam   -wi-a----- 1020.00m                                                    
+        logs2_exam exam2  -wi-a----- 1020.00m       
         
 
         
+
+
+
+
+
+
+
+
+
