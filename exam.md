@@ -2,7 +2,7 @@
 Первым шагом поднимем 2 виртуалки, предварительно добавив им еще по 2 диска .
 
 **2.**
-Добавим пользователя exam и разрешим ему sudo без пароля:
+Добавим пользователя exam и разрешим ему sudo без пароля,также добавим его в 2 группы - администратов и группу wheel (из которой можно переходить в root ):
     
     sudo useradd -G adm,wheel -s /bin/bash exam
     sudo visudo 
@@ -161,11 +161,155 @@
         
 
         
+        
+        #Форматируем разделы в ext4 , создаем директории и смонтируем в них разделы. mkfs при форматировании оставит 5% от диска для root .Можно воспользоваться parted , в таком случае весь диск будет полностью использоваться. ( ` sudo parted dev/sdb1 (sdc1) ; (parted) mkpart primary ext4 0% 100% ` ) .
+        
+        [exam@centos2 ~]$ sudo parted /dev/sdb1
+        GNU Parted 3.1
+        Using /dev/sdb1
+        Welcome to GNU Parted! Type 'help' to view a list of commands.
+        (parted) mklabel gpt                                                      
+        Error: Partition(s) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
+        28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+        58, 59, 60, 61, 62, 63, 64 on /dev/sdb1 have been written, but we have been unable to inform the kernel of the change,
+        probably because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now
+        before making further changes.
+        Ignore/Cancel? ^Z                                                         
+        [5]+  Stopped                 sudo parted /dev/sdb1
+        [exam@centos2 ~]$ sudo parted /dev/sdc1
+        GNU Parted 3.1
+        Using /dev/sdc1
+        Welcome to GNU Parted! Type 'help' to view a list of commands.
+        (parted) mklabel gpt                                                      
+        Error: Partition(s) 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
+        28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+        58, 59, 60, 61, 62, 63, 64 on /dev/sdc1 have been written, but we have been unable to inform the kernel of the change,
+        probably because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now
+        before making further changes.
+        Ignore/Cancel? ^Z                                                         
+        [1]+  Stopped                 sudo parted /dev/sdc1
+
+        [exam@centos2 ~]$ sudo reboot
+
+        [exam@centos2 ~]$ sudo mkfs.ext4 /dev/sdc1 
+        mke2fs 1.42.9 (28-Dec-2013)
+        Filesystem label=
+        OS type: Linux
+        Block size=4096 (log=2)
+        Fragment size=4096 (log=2)
+        Stride=0 blocks, Stripe width=0 blocks
+        65536 inodes, 261888 blocks
+        13094 blocks (5.00%) reserved for the super user
+        First data block=0
+        Maximum filesystem blocks=268435456
+        8 block groups
+        32768 blocks per group, 32768 fragments per group
+        8192 inodes per group
+        Superblock backups stored on blocks: 
+    	32768, 98304, 163840, 229376
+
+        Allocating group tables: done                            
+        Writing inode tables: done                            
+        Creating journal (4096 blocks): done
+        Writing superblocks and filesystem accounting information: done
+
+        [exam@centos2 ~]$ sudo mkfs.ext4 /dev/sdb1 
+        mke2fs 1.42.9 (28-Dec-2013)
+        Filesystem label=
+        OS type: Linux
+        Block size=4096 (log=2)
+        Fragment size=4096 (log=2)
+        Stride=0 blocks, Stripe width=0 blocks
+        65536 inodes, 261888 blocks
+        13094 blocks (5.00%) reserved for the super user
+        First data block=0
+        Maximum filesystem blocks=268435456
+        8 block groups
+        32768 blocks per group, 32768 fragments per group
+        8192 inodes per group
+        Superblock backups stored on blocks: 
+    	32768, 98304, 163840, 229376
+
+        Allocating group tables: done                            
+        Writing inode tables: done                            
+        Creating journal (4096 blocks): done
+        Writing superblocks and filesystem accounting information: done
+
+        
+        [exam@centos2 ~]$ sudo fdisk -l
+
+        Disk /dev/sdb: 1073 MB, 1073741824 bytes, 2097152 sectors
+        Units = sectors of 1 * 512 = 512 bytes
+        Sector size (logical/physical): 512 bytes / 512 bytes
+        I/O size (minimum/optimal): 512 bytes / 512 bytes
+        Disk label type: dos
+        Disk identifier: 0xdbb1f48d
+
+        Device Boot      Start         End      Blocks   Id  System
+        /dev/sdb1            2048     2097151     1047552   8e  Linux LVM
+
+        Disk /dev/sdc: 1073 MB, 1073741824 bytes, 2097152 sectors
+        Units = sectors of 1 * 512 = 512 bytes
+        Sector size (logical/physical): 512 bytes / 512 bytes
+        I/O size (minimum/optimal): 512 bytes / 512 bytes
+        Disk label type: dos
+        Disk identifier: 0x072f24e6
+
+        Device Boot      Start         End      Blocks   Id  System
+        /dev/sdc1            2048     2097151     1047552   8e  Linux LVM
 
 
 
+        [exam@centos2 ~]$ sudo mkdir /opt/mount1
+        [exam@centos2 ~]$ sudo mkdir /opt/mount2
+        [exam@centos2 ~]$ sudo mount /dev/sdb1 /opt/mount1
+        [exam@centos2 ~]$ sudo mount /dev/sdc1 /opt/mount2
+        [exam@centos2 ~]$ sudo blkid
+        /dev/sdb1: UUID="5c01d888-9530-48e3-8ae7-572a099f0cc1" TYPE="ext4" 
+        /dev/sdc1: UUID="7154aa47-ed66-435a-89e3-ea8890c22cf9" TYPE="ext4" 
+        /dev/sda1: UUID="aa459a1e-42c5-434f-a118-cd42f5ca09f2" TYPE="xfs" 
+        /dev/sda2: UUID="c8YDo3-Rxaf-Gbdd-Y4pi-C3we-QGr5-00mrGh" TYPE="LVM2_member" 
+        /dev/mapper/centos-root: UUID="14bada77-da6f-4fcf-8c91-cd5606ee17fb" TYPE="xfs" 
+        /dev/mapper/centos-swap: UUID="012b37b3-2c4e-42cf-ba90-e4aec74a7500" TYPE="swap" 
+        
+        #Чтобы автоматически монтировать  файловую систему после перезагрузки, добавим запись в /etc/fstab
 
+        5c01d888-9530-48e3-8ae7-572a099f0cc1 /opt/mount1 ext4 defaults 0 2
+        Первое поле (UUID=…) – идентификатор раздела, который можно посмотреть утилитой blkid.
 
+        Второе (/opt/mount1) – точка монтирования раздела
+
+        Третье (ext4) – тип файловой системы
+
+        Четвертое  (defaults) — опции монтировании в fstab. Опция defaults — использование параметров по-умолчанию: exec, auto, rw, nouser, async, nosuid, atime.         Разрешить запуск исполняемых файлов,  установить права на чтение и запись, обычным пользователям запретить подключать/отключать устройство, включение опции асинхронного ввода/вывода,  производить запись времени последнего доступа к файлу,  заблокировать работу SUID и SGID битов для устройства.
+
+        Пятое поле — необходимость создавать резервные копии раздела утилите dump.
+        0 – не создавать резервные копии.
+        1 – разрешить резервные копии.
+
+        Шестое — необходимость проверки файловой системы утилитой fsck
+
+        0 – раздел не будет проверяться.
+        1 –будет проверяться в первую очередь.
+        2 –будет проверяться после раздела со значением 1.
+
+        
+        [exam@centos2 ~]$ sudo vim /etc/fstab    
+        #
+        # /etc/fstab
+        # Created by anaconda on Fri Mar  5 02:13:31 2021
+        #
+        # Accessible filesystems, by reference, are maintained under '/dev/disk'
+        # See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+        #
+        /dev/mapper/centos-root /                       xfs     defaults        0 0
+        UUID=aa459a1e-42c5-434f-a118-cd42f5ca09f2 /boot                   xfs     defaults        0 0
+        /dev/mapper/centos-swap swap                    swap    defaults        0 0
+        UUID=5c01d888-9530-48e3-8ae7-572a099f0cc1 /opt/mount1 ext4 defaults 0 0
+        UUID=7154aa47-ed66-435a-89e3-ea8890c22cf9 /opt/mount2 ext4 defaults 0 0 
+        
+
+        
 
 
 
