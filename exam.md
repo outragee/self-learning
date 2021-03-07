@@ -13,6 +13,7 @@
 **3.**
 Создадим группу hadoop c GID 1111 ,  добавим пользователей и отметим что основная группа 1111, для каждого пользователя создадим домашнюю директорию,поместим пользователей в группу hadoop.
     
+    [exam@centos2 ~]$ sudo groupadd -g 1111 hadoop 
     [exam@centos2 ~]$ sudo useradd -m -G hadoop -g 1111 hadoop
     [exam@centos2 ~]$ sudo useradd -m -G hadoop -g 1111 yarn
     [exam@centos2 ~]$ sudo useradd -m -G hadoop -g 1111 hdfs
