@@ -58,8 +58,14 @@
  
 
 
-    ssh-copy-id -i centos2@192.168.43.103
-    ssh-copy-id -i centos1@192.168.43.249
+    ssh-copy-id -i hadoop@192.168.0.17
+    ssh-copy-id -i hadoop@192.168.0.18
+    
+    #Редактируем /etc/hosts
+    [exam@centos2 ~]$ sudo vim /etc/hosts
+    192.168.0.17 exam.vm1 exam1 #на vm2
+    193.168.0.18 exam.vm2 exam2 #на vm1
+
     
 ***5.*** 
 Установим OpenJDK8 из репозитория CentOS. Скачаем архив по ссылке (тут есть несколько вариантов , самый простой это установить wget а затем пройти по ссылке в задании и скопировать ссылку на кнопке download tar.gz). Второй вариант ,скачать на локальную машину и загрузить через scp на виртуальные. Затем разархивируем файлы в директорию /opt/hadoop-3.1.2/ и сделаем симлинк.
@@ -342,4 +348,25 @@
         [exam@centos2 mount1]$ sudo chown yarn:hadoop /opt/mount1/nodemanager-log-dir/
 
 
+***8.***
+Скачивание,переименование , жуткий sed...
+Убив час, сделал следующий конвеер . Он берет из вывода finde имя файла , передает в sed, sed показывает и старое и новое значение , а затем команда mv при помощи подстановки xargs переименовывает файл.
+
+        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b 
+        2021-03-07 09:12:09 URL:https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b [178810] -> "2f42f248f02aeda18105805493bb0e9b" [1]
+        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/hadoop-env.sh/g' | sudo xargs -n2 mv
+        [exam@centos2 hadoop]$ sudo wget https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7
+        --2021-03-07 09:17:01--  https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7
+        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/core-site.xml/g' | sudo xargs -n2 mv
+        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38
+        2021-03-07 09:19:52 URL:https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38 [64584] -> "2bedf24fd2721bad276e416b57d63e38" [1]
+        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ [exam[exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name         "[0-9]*" -o -name "ba*" | sed 'p;s/.*/hdfs-site.xml/g' | sudo xargs -n2 mv
+        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158
+        2021-03-07 09:21:57 URL:https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158 [68735] -> "ba87c0072cd51aa85c9ee6334cc99158" [1]
+        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/yarn-site.xml/g' | sudo xargs -n2 mv
+        [exam@centos2 hadoop]$ ls
+        core-site.xml  hadoop-env.sh  hdfs-site.xml  yarn-site.xml
+
+        #Задаем необходимые значения переменных , редактируя файлы, согласно заданию .
+        
 
