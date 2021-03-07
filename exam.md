@@ -308,9 +308,34 @@
         UUID=5c01d888-9530-48e3-8ae7-572a099f0cc1 /opt/mount1 ext4 defaults 0 0
         UUID=7154aa47-ed66-435a-89e3-ea8890c22cf9 /opt/mount2 ext4 defaults 0 0 
         
+**7.**
+Настройка директорий.
 
+
+Для VM1:
+
+        [exam@centos2 mount1]$ sudo mkdir namenode-dir
+        [exam@centos2 mount1]$ sudo mkdir /opt/mount2/namenode-dir
+        [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount1/namenode-dir/
+        [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount2/namenode-dir/
         
+Для VM2:
 
+        [exam@centos1 mount1]$ sudo mkdir datanode-dir
+        [exam@centos1 mount1]$ sudo mkdir /opt/mount2/datanode-dir
+        [exam@centos1 mount1]$ sudo chown hdfs:hadoop /opt/mount1/datanode-dir/
+        [exam@centos1 mount1]$ sudo chown hdfs:hadoop /opt/mount2/datanode-dir/
+
+Для VM1 и VM2:
+
+        [exam@centos1 mount1]$ sudo mkdir nodemanager-local-dir
+        [exam@centos1 mount1]$ sudo mkdir /opt/mount2/nodemanager-local-dir
+        [exam@centos1 mount1]$ sudo mkdir nodemanager-log-dir
+        [exam@centos1 mount1]$ sudo mkdir /opt/mount2/nodemanager-log-dir
+        [exam@centos2 mount1]$ sudo chown yarn:hadoop /opt/mount2/nodemanager-local-dir/
+        [exam@centos2 mount1]$ sudo chown yarn:hadoop /opt/mount1/nodemanager-local-dir/
+        [exam@centos2 mount1]$ sudo chown yarn:hadoop /opt/mount2/nodemanager-log-dir/
+        [exam@centos2 mount1]$ sudo chown yarn:hadoop /opt/mount1/nodemanager-log-dir/
 
 
 
