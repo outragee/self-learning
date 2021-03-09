@@ -416,11 +416,10 @@
 ***9.***
 Напишем юнит-сервис:
 
-        
+#dfs unit
 
-        
         [Unit]
-        Description=Hadoop DFS namenode and datanode
+        Description=Hadoop DFS
         After=network.target syslog.target remote-fs.target nss-lookup.target network-online.target
         Requires=network-online.target
 
@@ -428,20 +427,23 @@
         [Service]
         User=hadoop
         Group=hadoop
-        Type=forking
+        Type=oneshot
+        RemainAfterExit=yes
         ExecStart=/opt/hadoop-3.1.2/sbin/start-dfs.sh
         ExecStop=/opt/hadoop-3.1.2/sbin/stop-dfs.sh
         WorkingDirectory=/opt/hadoop-3.1.2/
-        Restart=on-failure
+        #Restart=on-failure
         PIDFile=/opt/hadoop-3.1.2/hdfs.pid
         Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre
         Environment=HADOOP_HOME=/usr/local/hadoop/current/hadoop-3.1.2
 
-        TimeoutStartSec=2min
+        TimeoutStartSec=200
 
 
         [Install]
         WantedBy=multi-user.target
+
+      
 
 
         
