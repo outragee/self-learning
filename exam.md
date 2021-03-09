@@ -77,7 +77,7 @@
         [exam@centos2 ~]$ ls
         hadoop-3.1.2.tar.gz
         [exam@centos2 ~]$ sudo tar xf hadoop-3.1.2.tar.gz -C /opt/
-        [exam@centos2 local]$ ln -s /opt/hadoop-3.1.2/ /usr/local/hadoop/current
+        [exam@centos2 local]$ ln -s /opt/hadoop-3.1.2 /usr/local/hadoop/current
 
 ***6.***
 Настройка дисков.
@@ -321,25 +321,87 @@
 
 
 ***8.***
-Скачивание,переименование , жуткий sed...
-Убив час, сделал следующий конвеер . Он берет из вывода finde имя файла , передает в sed, sed показывает и старое и новое значение , а затем команда mv при помощи подстановки xargs переименовывает файл.
+Скачивание,переименование.
 
-        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b 
-        2021-03-07 09:12:09 URL:https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b [178810] -> "2f42f248f02aeda18105805493bb0e9b" [1]
-        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/hadoop-env.sh/g' | sudo xargs -n2 mv
-        [exam@centos2 hadoop]$ sudo wget https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7
-        --2021-03-07 09:17:01--  https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7
-        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/core-site.xml/g' | sudo xargs -n2 mv
-        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38
-        2021-03-07 09:19:52 URL:https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38 [64584] -> "2bedf24fd2721bad276e416b57d63e38" [1]
-        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ [exam[exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name         "[0-9]*" -o -name "ba*" | sed 'p;s/.*/hdfs-site.xml/g' | sudo xargs -n2 mv
-        [exam@centos2 hadoop]$ sudo wget -nv https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158
-        2021-03-07 09:21:57 URL:https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158 [68735] -> "ba87c0072cd51aa85c9ee6334cc99158" [1]
-        [exam@centos2 hadoop]$ sudo find /usr/local/hadoop/current/etc/hadoop/ . -name "[0-9]*" -o -name "ba*" | sed 'p;s/.*/yarn-site.xml/g' | sudo xargs -n2 mv
-        [exam@centos2 hadoop]$ ls
-        core-site.xml  hadoop-env.sh  hdfs-site.xml  yarn-site.xml
-
-        #Задаем необходимые значения переменных , редактируя файлы, согласно заданию .
+        [exam@centos1 Downloads]$ wget https://gist.github.com/rdaadr/2f42f248f02aeda18105805493bb0e9b/raw/6303e424373b3459bcf3720b253c01373666fe7c/hadoop-env.sh
+        [exam@centos1 Downloads]$ wget https://gist.github.com/rdaadr/64b9abd1700e15f04147ea48bc72b3c7/raw/2d416bf137cba81b107508153621ee548e2c877d/core-site.xml
+        [exam@centos1 Downloads]$ wget https://gist.github.com/rdaadr/2bedf24fd2721bad276e416b57d63e38/raw/640ee95adafa31a70869b54767104b826964af48/hdfs-site.xml
+        [exam@centos1 Downloads]$ wget https://gist.github.com/Stupnikov-NA/ba87c0072cd51aa85c9ee6334cc99158/raw/bda0f760878d97213196d634be9b53a089e796ea/yarn-site.xml
+       
         
-        /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre/bin/java  #путь к java-home
+        #Задаем необходимые значения переменных , редактируя файлы, согласно заданию 
+        
+        [exam@centos1 Downloads]$ sed -i 's|%PATH_TO_OPENJDK8_INSTALLATION%|/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre|g' hadoop-env.sh 
+        sed -i 's|%PATH_TO_HADOOP_INSTALLATION|/usr/local/hadoop/current/hadoop-3.1.2|g' hadoop-env.sh 
+        [exam@centos1 Downloads]$ sed -i 's|%HADOOP_HEAP_SIZE%|512M|g' hadoop-env.sh 
+        [exam@centos1 Downloads]$ sed -i 's|%HDFS_NAMENODE_HOSTNAME%|exam.vm1|g' core-site.xml 
+        [exam@centos1 Downloads]$ sed -i 's|%NAMENODE_DIRS%|/opt/mount1/namenode-dir,/opt/mount2/namenode-dir|g' core-site.xml 
+        [exam@centos1 Downloads]$ sed -i 's|%YARN_RESOURCE_MANAGER_HOSTNAME%|exam.vm1|g' yarn-site.xml 
+        [exam@centos1 Downloads]$ sed -i 's|%NODE_MANAGER_LOCAL_DIR%|/opt/mount1/nodemanager-local-dir,/opt/mount2/nodemanager-local-dir|g' yarn-site.xml
+        [exam@centos1 Downloads]$ sed -i 's|%NODE_MANAGER_LOG_DIR%|/opt/mount1/nodemanager-log-dir,/opt/mount2/nodemanager-log-dir|g' yarn-site.xml
+        
+        
+        #Переместим файлы
+        
+        [exam@centos1 Downloads]$ sudo mv yarn-site.xml /opt/hadoop-3.1.2/etc/hadoop/
+        [exam@centos1 Downloads]$ sudo mv hadoop-env.sh/opt/hadoop-3.1.2/etc/hadoop/
+        [exam@centos1 Downloads]$ sudo mv core-site.xml /opt/hadoop-3.1.2/etc/hadoop/
+        [exam@centos1 Downloads]$ sudo mv yarn-site.xml /opt/hadoop-3.1.2/etc/hadoop/
+        
+        
+        #Задать переменную окружения HADOOP_HOMEчерез /etc/profile
+        
+        [exam@centos1 hadoop]$ sudo vim /etc/profile
+            export HADOOP_HOME=/usr/local/hadoop/current/hadoop-3.1.2
+            
+            
+            
+        #Произведем форматирование HDFS (от имени пользователя hdfs):
+        
+        2021-03-09 03:52:37,130 INFO common.Storage: Storage directory /opt/hadoop-3.1.2/etc/hadoop/"/opt/mount1/namenode-dir has been successfully formatted.
+        2021-03-09 03:52:37,161 INFO common.Storage: Storage directory /opt/mount2/namenode-dir" has been successfully formatted.
+        2021-03-09 03:52:37,190 INFO namenode.FSImageFormatProtobuf: Saving image file /opt/hadoop-3.1.2/etc/hadoop/"/opt/mount1/namenode-dir/current/fsimage.ckpt_0000000000000000000 using no compression
+        2021-03-09 03:52:37,190 INFO namenode.FSImageFormatProtobuf: Saving image file /opt/mount2/namenode-dir"/current/fsimage.ckpt_0000000000000000000 using no compression
+        2021-03-09 03:52:37,321 INFO namenode.FSImageFormatProtobuf: Image file /opt/hadoop-3.1.2/etc/hadoop/"/opt/mount1/namenode-dir/current/fsimage.ckpt_0000000000000000000 of size 388 bytes saved in 0 seconds .
+        2021-03-09 03:52:37,321 INFO namenode.FSImageFormatProtobuf: Image file /opt/mount2/namenode-dir"/current/fsimage.ckpt_0000000000000000000 of size 388 bytes saved in 0 seconds .
+        2021-03-09 03:52:37,348 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+        2021-03-09 03:52:37,358 INFO namenode.NameNode: SHUTDOWN_MSG: 
+        /************************************************************
+        SHUTDOWN_MSG: Shutting down NameNode at centos1/192.168.43.60
+        
+        ************************************************************/
+        
+        #Запустим демоны сервисов:
+        
+        [exam@centos1 hadoop]$ $HADOOP_HOME/bin/hdfs --daemon start namenode
+        [exam@centos1 hadoop]$ $HADOOP_HOME/bin/yarn --daemon start resourcemanager
+        [exam@centos1 hadoop]$ 
+
+
+        #Проверим доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам:
+        
+        
+        [exam@centos1 hadoop]$ sudo lsof -i -P -n
+        COMMAND   PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+        chronyd   757  chrony    5u  IPv4  16746      0t0  UDP 127.0.0.1:323 
+        chronyd   757  chrony    6u  IPv6  16747      0t0  UDP [::1]:323 
+        dhclient  903    root    6u  IPv4  18619      0t0  UDP *:68 
+        sshd     1092    root    3u  IPv4  18031      0t0  TCP *:22 (LISTEN)
+        sshd     1092    root    4u  IPv6  18050      0t0  TCP *:22 (LISTEN)
+        master   1565    root   13u  IPv4  20523      0t0  TCP 127.0.0.1:25 (LISTEN)
+        master   1565    root   14u  IPv6  20524      0t0  TCP [::1]:25 (LISTEN)
+        sshd     8370    root    3u  IPv4  25731      0t0  TCP 192.168.43.60:22->192.168.43.236:48498 (ESTABLISHED)
+        sshd     8373 centos1    3u  IPv4  25731      0t0  TCP 192.168.43.60:22->192.168.43.236:48498 (ESTABLISHED)
+        java     9220    root  250u  IPv4  32265      0t0  TCP *:9870 (LISTEN)
+        java     9220    root  263u  IPv4  32276      0t0  TCP 192.168.43.60:8020 (LISTEN)
+        java     9332    root  264u  IPv4  32881      0t0  TCP 192.168.43.60:8088 (LISTEN)
+        java     9332    root  274u  IPv4  31263      0t0  TCP 192.168.43.60:8033 (LISTEN)
+        java     9332    root  285u  IPv4  31267      0t0  TCP 192.168.43.60:8031 (LISTEN)
+        java     9332    root  295u  IPv4  31271      0t0  TCP 192.168.43.60:8030 (LISTEN)
+        java     9332    root  305u  IPv4  31275      0t0  TCP 192.168.43.60:8032 (LISTEN)
+
+        
+      
+
+
         
