@@ -63,8 +63,8 @@
     
     #Редактируем /etc/hosts
     [exam@centos2 ~]$ sudo vim /etc/hosts
-    192.168.0.17 exam.vm1 exam1 #на vm2
-    193.168.0.18 exam.vm2 exam2 #на vm1
+    192.168.0.17 exam.vm1 exam1  #vm2
+    193.168.0.18 exam.vm2 exam2  #vm1
 
     
 ***5.*** 
@@ -353,6 +353,7 @@
         
         [exam@centos1 hadoop]$ sudo vim /etc/profile
             export HADOOP_HOME=/usr/local/hadoop/current/hadoop-3.1.2
+        [exam@centos1 hadoop]$ source /etc/profile
             
             
             
@@ -380,7 +381,7 @@
 
         #Проверим доступность Web-интефейсов HDFS Namenode и YARN Resource Manager по портам:
         
-        
+        #vm1
         [exam@centos1 hadoop]$ sudo lsof -i -P -n
         COMMAND   PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
         chronyd   757  chrony    5u  IPv4  16746      0t0  UDP 127.0.0.1:323 
@@ -392,16 +393,26 @@
         master   1565    root   14u  IPv6  20524      0t0  TCP [::1]:25 (LISTEN)
         sshd     8370    root    3u  IPv4  25731      0t0  TCP 192.168.43.60:22->192.168.43.236:48498 (ESTABLISHED)
         sshd     8373 centos1    3u  IPv4  25731      0t0  TCP 192.168.43.60:22->192.168.43.236:48498 (ESTABLISHED)
-        java     9220    root  250u  IPv4  32265      0t0  TCP *:9870 (LISTEN)
-        java     9220    root  263u  IPv4  32276      0t0  TCP 192.168.43.60:8020 (LISTEN)
-        java     9332    root  264u  IPv4  32881      0t0  TCP 192.168.43.60:8088 (LISTEN)
-        java     9332    root  274u  IPv4  31263      0t0  TCP 192.168.43.60:8033 (LISTEN)
-        java     9332    root  285u  IPv4  31267      0t0  TCP 192.168.43.60:8031 (LISTEN)
-        java     9332    root  295u  IPv4  31271      0t0  TCP 192.168.43.60:8030 (LISTEN)
-        java     9332    root  305u  IPv4  31275      0t0  TCP 192.168.43.60:8032 (LISTEN)
+        java     9220    exam  250u  IPv4  32265      0t0  TCP *:9870 (LISTEN)
+        java     9220    exam  263u  IPv4  32276      0t0  TCP 192.168.43.60:8020 (LISTEN)
+        java     9332    exam  264u  IPv4  32881      0t0  TCP 192.168.43.60:8088 (LISTEN)
+        java     9332    exam  274u  IPv4  31263      0t0  TCP 192.168.43.60:8033 (LISTEN)
+        java     9332    exam  285u  IPv4  31267      0t0  TCP 192.168.43.60:8031 (LISTEN)
+        java     9332    exam  295u  IPv4  31271      0t0  TCP 192.168.43.60:8030 (LISTEN)
+        java     9332    exam  305u  IPv4  31275      0t0  TCP 192.168.43.60:8032 (LISTEN)
 
         
-      
+        #vm2
+        sshd     11798    root    3u  IPv4  31743      0t0  TCP 192.168.43.142:22->192.168.43.236:59690 (ESTABLISHED)
+        sshd     11801 centos2    3u  IPv4  31743      0t0  TCP 192.168.43.142:22->192.168.43.236:59690 (ESTABLISHED)
+        java     12286    exam  265u  IPv4  38500      0t0  TCP *:36595 (LISTEN)
+        java     12286    exam  277u  IPv4  38510      0t0  TCP *:8040 (LISTEN)
+        java     12286    exam  287u  IPv4  37686      0t0  TCP *:8042 (LISTEN)
+        [exam@centos2 ~]$ 
+        
+       
 
+
+        
 
         
