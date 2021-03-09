@@ -303,6 +303,8 @@
 
         [exam@centos2 mount1]$ sudo mkdir datanode-dir
         [exam@centos2 mount1]$ sudo mkdir /opt/mount2/datanode-dir
+
+                             
         [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount1/datanode-dir/
         [exam@centos2 mount1]$ sudo chown hdfs:hadoop /opt/mount2/datanode-dir/
 
@@ -411,6 +413,35 @@
         [exam@centos2 ~]$ 
         
        
+***9.***
+Напишем юнит-сервис:
+
+        
+
+        
+        [Unit]
+        Description=Hadoop DFS namenode and datanode
+        After=network.target syslog.target remote-fs.target nss-lookup.target network-online.target
+        Requires=network-online.target
+
+
+        [Service]
+        User=hadoop
+        Group=hadoop
+        Type=forking
+        ExecStart=/opt/hadoop-3.1.2/sbin/start-dfs.sh
+        ExecStop=/opt/hadoop-3.1.2/sbin/stop-dfs.sh
+        WorkingDirectory=/opt/hadoop-3.1.2/
+        Restart=on-failure
+        PIDFile=/opt/hadoop-3.1.2/hdfs.pid
+        Environment=JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre
+        Environment=HADOOP_HOME=/usr/local/hadoop/current/hadoop-3.1.2
+
+        TimeoutStartSec=2min
+
+
+        [Install]
+        WantedBy=multi-user.target
 
 
         
