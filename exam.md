@@ -443,10 +443,17 @@
         [Install]
         WantedBy=multi-user.target
 
-      
+
+***10***Необходимо пробросить порт из сети виртуальных машин к локальной, чтобы зайти в веб интерфейс.
+
+
+        outragee@outragee-X220:~$ ssh -L 4343:localhost:9870 exam@192.168.43.60
+        
+        
 **Проверка**
 
-![ignition](https://user-images.githubusercontent.com/61155973/110492164-0002ca80-8103-11eb-885d-204596a7c7b8.png)
+![9870](https://user-images.githubusercontent.com/61155973/110576902-a6d27f80-8172-11eb-9bc8-fb298c481064.png)
+
 
         
 
