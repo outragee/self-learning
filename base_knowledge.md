@@ -1299,6 +1299,9 @@ Boot process:
     [Ivan_Rigalin@vm-one ~]$ logout
     Connection to 40.68.74.188 closed.
 
+#Имея приватную часть ключа можно сгенерировать публичную часть# 
+
+`ssh-keygen -y -f ~/.ssh/key > ~/.ssh/key.pub`
 
 
 Проверим ,есть ли сервис на 80 порту:
